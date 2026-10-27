@@ -1,0 +1,39 @@
+# dependencies
+node_modules/
+
+# builds
+backend/dist/
+frontend/.next/
+frontend/out/
+frontend/build/
+
+# env files
+.env
+.env.local
+.env.*.local
+!.env.example
+!.env.local.example
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.tsbuildinfo
+backend/dev.log
+
+# os
+.DS_Store
+Thumbs.db
+
+# editors
+.vscode/
+.idea/
+
+# deployment
+.vercel
+
+# uploads
+backend/uploads/
+
+# local MongoDB data dir (mongod started manually for local dev)
+backend/.mongo-data/

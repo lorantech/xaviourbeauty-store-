@@ -1,0 +1,25 @@
+{
+    "name":  "xaviour",
+    "version":  "1.0.0",
+    "description":  "Xaviour Beauty Store - monorepo root (backend + frontend)",
+    "private":  true,
+    "scripts":  {
+                    "build":  "npm run build --workspace backend && npm run build --workspace frontend",
+                    "dev":  "echo Run from backend/ or frontend/ - not root",
+                    "dev:backend":  "npm run dev --workspace backend",
+                    "dev:frontend":  "npm run dev --workspace frontend",
+                    "seed":  "npm run seed --workspace backend",
+                    "install:all":  "npm install --workspaces --include-workspace-root",
+                    "typecheck":  "npm run build --workspace backend"
+                },
+    "keywords":  [
+
+                 ],
+    "author":  "",
+    "license":  "ISC",
+    "type":  "commonjs",
+    "workspaces":  [
+                        "backend",
+                        "frontend"
+                    ]
+}

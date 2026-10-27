@@ -1,0 +1,57 @@
+
+> frontend@0.1.0 dev
+> next dev
+
+▲ Next.js 16.4.2 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://213.255.146.178:3000
+- Environments: .env.local
+✓ Ready in 3.5s
+✓ Running next.config.ts took 1055ms
+- Cache Components enabled
+- Partial Prefetching enabled
+
+○ Compiling / ...
+ GET / 200 in 3.2s (next.js: 2.3s, application-code: 952ms)
+✓ Finished writing to filesystem cache in 11.1s
+ GET / 200 in 191ms (next.js: 13ms, application-code: 178ms)
+ GET / 200 in 4.6s (next.js: 275ms, application-code: 4.3s)
+○ Compiling /ceo-corner ...
+ GET /ceo-corner 200 in 1968ms (next.js: 795ms, application-code: 1173ms)
+✓ Finished writing to filesystem cache in 13.7s
+ GET / 200 in 14.8s (next.js: 255ms, application-code: 14.5s)
+✓ Finished filesystem cache database compaction in 11.3s
+ GET /ceo-corner 200 in 6.3s (next.js: 373ms, application-code: 5.9s)
+ GET / 200 in 5.2s (next.js: 706ms, application-code: 4.4s)
+○ Compiling /testimonials ...
+ GET /ceo-corner 200 in 5.8s (next.js: 1782ms, application-code: 4.0s)
+ GET /testimonials 200 in 3.2s (next.js: 1081ms, application-code: 2.2s)
+✓ Finished filesystem cache database compaction in 10.3s
+ GET /ceo-corner 200 in 21.7s (next.js: 764ms, application-code: 20.9s)
+ GET / 200 in 2.5s (next.js: 354ms, application-code: 2.1s)
+ GET / 200 in 1440ms (next.js: 161ms, application-code: 1279ms)
+ GET /ceo-corner 200 in 1616ms (next.js: 148ms, application-code: 1468ms)
+ GET / 200 in 653ms (next.js: 71ms, application-code: 581ms)
+○ Compiling /cart ...
+ GET /cart 200 in 3.8s (next.js: 2.2s, application-code: 1588ms)
+✓ Finished filesystem cache database compaction in 10.8s
+ GET / 200 in 570ms (next.js: 40ms, application-code: 530ms)
+○ Compiling /shop ...
+ GET /shop 200 in 700ms (next.js: 129ms, application-code: 571ms)
+ GET / 200 in 3.1s (next.js: 1871ms, application-code: 1179ms)
+ GET / 200 in 500ms (next.js: 15ms, application-code: 485ms)
+ GET /ceo-corner 200 in 304ms (next.js: 26ms, application-code: 278ms)
+ GET /testimonials 200 in 719ms (next.js: 21ms, application-code: 698ms)
+ GET / 200 in 622ms (next.js: 28ms, application-code: 594ms)
+ GET /shop 200 in 466ms (next.js: 105ms, application-code: 361ms)
+ GET /shop 200 in 180ms (next.js: 14ms, application-code: 166ms)
+ GET /cart 200 in 137ms (next.js: 12ms, application-code: 125ms)
+ GET /shop 200 in 485ms (next.js: 76ms, application-code: 409ms)
+ GET /ceo-corner 200 in 292ms (next.js: 21ms, application-code: 271ms)
+○ Compiling /auth/login ...
+ GET /auth/login 200 in 309ms (next.js: 108ms, application-code: 201ms)
+ GET /shop 200 in 109ms (next.js: 7ms, application-code: 102ms)
+ GET /testimonials 200 in 83ms (next.js: 5ms, application-code: 78ms)
+ GET / 200 in 98ms (next.js: 6ms, application-code: 92ms)
+ GET /cart 200 in 75ms (next.js: 7ms, application-code: 68ms)
+ GET / 200 in 84ms (next.js: 12ms, application-code: 72ms)
