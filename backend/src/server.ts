@@ -30,6 +30,7 @@ const allowedOrigins = [
   env.frontendUrl,
   "https://xaviourbeautystore.vercel.app",
   "https://xaviour.vercel.app",
+  "https://frontend-tau-orpin-61.vercel.app",
   /\.vercel\.app$/,
 ];
 
