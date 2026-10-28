@@ -60,8 +60,8 @@ export default function Footer() {
         <div>
           <h4 className="text-white font-semibold mb-3">Contact</h4>
           <ul className="space-y-2 text-sm">
-            <li className="flex items-center gap-2"><Phone size={16} /> <a href="tel:+2348039640776" className="hover:text-brand">08039640776</a></li>
-            <li className="flex items-center gap-2"><MessageCircle size={16} /> <a href="https://wa.me/2348097513421" target="_blank" rel="noopener noreferrer" className="hover:text-brand">08097513421 (WhatsApp)</a></li>
+            <li className="flex items-center gap-2"><Phone size={16} /> <a href="tel:+2348039630776" className="hover:text-brand">08039630776</a></li>
+            <li className="flex items-center gap-2"><MessageCircle size={16} /> <a href="https://wa.me/2348039630776" target="_blank" rel="noopener noreferrer" className="hover:text-brand">08039630776 (WhatsApp)</a></li>
             <li>support@xaviourbeautystore.com</li>
           </ul>
         </div>
