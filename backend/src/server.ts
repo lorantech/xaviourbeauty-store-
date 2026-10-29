@@ -38,12 +38,23 @@ app.use(
   cors({
     origin: (origin: any, callback: any) => {
       if (!origin) return callback(null, true);
-      if (allowedOrigins.some((o: any) => (typeof o === "string" ? o === origin : o.test(origin)))) {
-        return callback(null, true);
+      const isAllowed = allowedOrigins.some((o: any) => {
+        if (typeof o === "string") return o === origin;
+        if (o instanceof RegExp) return o.test(origin);
+        return false;
+      });
+      if (isAllowed) {
+        return callback(null, origin);
       }
-      return callback(null, true);
+      // Allow all vercel.app and the specific frontend for now
+      if (/\.vercel\.app$/.test(origin)) {
+        return callback(null, origin);
+      }
+      return callback(null, origin);
     },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   })
 );
 
