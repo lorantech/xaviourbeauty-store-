@@ -122,7 +122,7 @@ export default function Checkout() {
                 <p><strong>Bank:</strong> {bankDetails.bankName}</p>
                 <p><strong>Account Number:</strong> {bankDetails.accountNumber}</p>
                 <p><strong>Account Name:</strong> {bankDetails.accountName}</p>
-                <p><strong>Amount:</strong> ₦{cart?.total?.toLocaleString()}</p>
+                <p><strong>Amount:</strong> ₦{(cart as any)?.total?.toLocaleString() || (cart as any)?.subtotal?.toLocaleString()}</p>
                 <p><strong>Order Reference:</strong> {orderId}</p>
               </div>
               <p className="text-xs text-gray-600">Make transfer via ATM, USSD, or Bank App. After payment, go to your Account &gt; Orders and submit proof of payment (receipt/screenshot).</p>
