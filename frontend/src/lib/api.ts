@@ -1,23 +1,11 @@
 import axios from "axios";
 
-const getBaseUrl = () => {
-  if (typeof window !== "undefined") {
-    const host = window.location.hostname;
-    if (host === "localhost" || host === "127.0.0.1") {
-      return process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
-    }
-    // Force production backend on deployed sites
-    return "https://backend-gng5aslhl-loran4.vercel.app/api";
-  }
-  return process.env.NEXT_PUBLIC_API_URL || "https://backend-gng5aslhl-loran4.vercel.app/api";
-};
-
-const baseURL = getBaseUrl();
+const API_BASE = "https://backend-gng5aslhl-loran4.vercel.app/api";
 
 export const api = axios.create({
-  baseURL,
+  baseURL: API_BASE,
   withCredentials: true,
 });
 
-export const API_URL = baseURL;
-export const BACKEND_URL = baseURL.replace(/\/api$/, "");
+export const API_URL = API_BASE;
+export const BACKEND_URL = API_BASE.replace(/\/api$/, "");
