@@ -12,6 +12,7 @@ const adminLinks = [
   { href: "/admin/products", label: "Products" },
   { href: "/admin/categories", label: "Categories" },
   { href: "/admin/orders", label: "Orders" },
+  { href: "/admin/bank-transfers", label: "Bank Transfers" },
   { href: "/admin/testimonials", label: "Testimonials" },
   { href: "/admin/ceo", label: "CEO Corner" },
   { href: "/admin/customers", label: "Customers" },
