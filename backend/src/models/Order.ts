@@ -30,11 +30,16 @@ export interface IOrder extends Document {
     instructions?: string;
     method?: string;
   };
-  paymentReference?: string;
-  trackingNumber?: string;
-  coupon?: Types.ObjectId;
-  createdAt: Date;
-  updatedAt: Date;
+  paymentMethod?: "paystack" | "bank_transfer";
+  bankTransferProof?: string;
+  bankTransferDetails?: {
+    bankName: string;
+    accountName: string;
+    accountNumber: string;
+    reference: string;
+    paidBy?: string;
+    paidAt?: Date;
+  };
 }
 
 const orderSchema = new Schema<IOrder>(
@@ -69,6 +74,16 @@ const orderSchema = new Schema<IOrder>(
       method: String,
     },
     paymentReference: String,
+    paymentMethod: { type: String, enum: ["paystack", "bank_transfer"], default: "paystack" },
+    bankTransferProof: String,
+    bankTransferDetails: {
+      bankName: String,
+      accountName: String,
+      accountNumber: String,
+      reference: String,
+      paidBy: String,
+      paidAt: Date,
+    },
     trackingNumber: String,
     coupon: { type: Schema.Types.ObjectId, ref: "Coupon" },
   },

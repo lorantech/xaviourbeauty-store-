@@ -22,7 +22,7 @@ export default function Footer() {
     <footer className="bg-zinc-900 text-zinc-300 mt-20">
       <div className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-5 gap-8">
         <div className="md:col-span-2">
-          <img src="/xaviour logo.jpg" alt="Xaviourbeautystore" className="h-12 w-auto mb-3 brightness-0 invert" />
+          <img src="/xaviour-logo.jpg" onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/xaviour%20logo.jpg"; }} alt="Xaviourbeautystore" className="h-12 w-auto mb-3 brightness-0 invert" />
           <p className="text-sm">Professional beauty, skincare, spa and salon equipment for professionals.</p>
           <div className="flex items-center gap-3 mt-4">
             <a href="https://www.facebook.com/xaviourbeautystore" target="_blank" rel="noopener noreferrer" className="hover:text-brand transition" aria-label="Facebook">

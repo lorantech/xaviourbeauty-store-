@@ -9,8 +9,11 @@ export interface IPayment extends Document {
   channel?: string;
   paystackData?: any;
   verifiedAt?: Date;
-  createdAt: Date;
-  updatedAt: Date;
+  method?: "paystack" | "bank_transfer";
+  proofUrl?: string;
+  proofDetails?: any;
+  reviewedBy?: Types.ObjectId;
+  reviewedAt?: Date;
 }
 
 const paymentSchema = new Schema<IPayment>(
@@ -23,6 +26,11 @@ const paymentSchema = new Schema<IPayment>(
     channel: String,
     paystackData: Schema.Types.Mixed,
     verifiedAt: Date,
+    method: { type: String, enum: ["paystack", "bank_transfer"], default: "paystack" },
+    proofUrl: String,
+    proofDetails: Schema.Types.Mixed,
+    reviewedBy: { type: Schema.Types.ObjectId, ref: "User" },
+    reviewedAt: Date,
   },
   { timestamps: true }
 );
