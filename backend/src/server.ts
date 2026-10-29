@@ -81,6 +81,8 @@ app.use("/api/payments/webhook", express.raw({ type: "*/*" }), (req: any, _res: 
 });
 
 app.get("/api/health", (_req: any, res: any) => res.json({ ok: true }));
+app.get("/api", (_req: any, res: any) => res.json({ ok: true, message: "Xaviourbeautystore API" }));
+app.get("/api/", (_req: any, res: any) => res.json({ ok: true, message: "Xaviourbeautystore API" }));
 app.get("/", (_req: any, res: any) => res.json({ ok: true, message: "Xaviourbeautystore API" }));
 
 app.use("/api/auth", authRoutes);
