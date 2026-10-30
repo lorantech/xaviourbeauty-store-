@@ -38,7 +38,7 @@ app.use(
   cors({
     origin: (origin: any, callback: any) => {
       if (!origin) return callback(null, true);
-      callback(null, origin.replace(/\/$/, ""));
+      callback(null, origin);
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
