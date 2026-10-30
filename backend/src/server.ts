@@ -36,12 +36,13 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: true,
+    origin: (origin: any, callback: any) => {
+      if (!origin) return callback(null, true);
+      callback(null, origin.replace(/\/$/, ""));
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
   })
 );
 
