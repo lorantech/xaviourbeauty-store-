@@ -26,7 +26,18 @@ const app = express();
 
 app.use((req: any, res: any, next: any) => {
   const origin = req.headers.origin;
-  res.header("Access-Control-Allow-Origin", origin);
+  const allowed = [
+    "https://frontend-tau-orpin-61.vercel.app",
+    "https://frontend-totk7ugk7-loran4.vercel.app",
+    "https://xaviourbeautystore.vercel.app",
+  ];
+  if (origin && (allowed.includes(origin) || origin.includes("vercel.app"))) {
+    res.header("Access-Control-Allow-Origin", origin);
+  } else if (origin) {
+    res.header("Access-Control-Allow-Origin", origin);
+  } else {
+    res.header("Access-Control-Allow-Origin", allowed[0]);
+  }
   res.header("Access-Control-Allow-Credentials", "true");
   res.header("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
   res.header("Access-Control-Allow-Headers", "Content-Type,Authorization,X-Requested-With,Accept");
