@@ -26,7 +26,13 @@ const app = express();
 
 app.use((req: any, res: any, next: any) => {
   const origin = req.headers.origin;
-  res.setHeader("Access-Control-Allow-Origin", origin || "*");
+  if (origin === "https://frontend-totk7ugk7-loran4.vercel.app") {
+    res.setHeader("Access-Control-Allow-Origin", "https://frontend-totk7ugk7-loran4.vercel.app");
+  } else if (origin) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  } else {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+  }
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Vary", "Origin");
   res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
