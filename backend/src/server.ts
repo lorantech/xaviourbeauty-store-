@@ -24,7 +24,17 @@ import dashboardRoutes from "./routes/dashboardRoutes";
 
 const app = express();
 
-app.use(helmet());
+app.use((req: any, res: any, next: any) => {
+  const origin = req.headers.origin;
+  res.header("Access-Control-Allow-Origin", origin);
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type,Authorization,X-Requested-With,Accept");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
+  next();
+});
 
 const allowedOrigins = [
   env.frontendUrl,
