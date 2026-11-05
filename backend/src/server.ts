@@ -24,41 +24,38 @@ import dashboardRoutes from "./routes/dashboardRoutes";
 
 const app = express();
 
-app.use((req: any, res: any, next: any) => {
-  const origin = req.headers.origin;
-  if (origin === "https://frontend-totk7ugk7-loran4.vercel.app") {
-    res.setHeader("Access-Control-Allow-Origin", "https://frontend-totk7ugk7-loran4.vercel.app");
-  } else if (origin) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  } else {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-  }
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Vary", "Origin");
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization,X-Requested-With,Accept");
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(204);
-  }
-  next();
-});
-
 const allowedOrigins = [
   env.frontendUrl,
   "https://xaviourbeautystore.vercel.app",
   "https://xaviour.vercel.app",
   "https://frontend-tau-orpin-61.vercel.app",
+  "https://frontend-git-main-loran4.vercel.app",
   /\.vercel\.app$/,
 ];
 
+function isOriginAllowed(origin: string | undefined): boolean {
+  if (!origin) return false;
+  return allowedOrigins.some((o) =>
+    typeof o === "string" ? o === origin : o.test(origin)
+  );
+}
+
 app.use((req: any, res: any, next: any) => {
   const origin = req.headers.origin;
-  res.setHeader("Access-Control-Allow-Origin", origin || "*");
+  const allowOrigin = isOriginAllowed(origin) ? origin : "*";
+  res.setHeader("Access-Control-Allow-Origin", allowOrigin);
   res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization,X-Requested-With,Accept");
+  res.setHeader("Vary", "Origin");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type,Authorization,X-Requested-With,Accept"
+  );
   if (req.method === "OPTIONS") {
-    return res.status(204).end();
+    return res.sendStatus(204);
   }
   next();
 });
