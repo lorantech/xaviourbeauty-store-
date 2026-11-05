@@ -24,26 +24,13 @@ import dashboardRoutes from "./routes/dashboardRoutes";
 
 const app = express();
 
-const allowedOrigins = [
-  env.frontendUrl,
-  "https://xaviourbeautystore.vercel.app",
-  "https://xaviour.vercel.app",
-  "https://frontend-tau-orpin-61.vercel.app",
-  "https://frontend-git-main-loran4.vercel.app",
-  /\.vercel\.app$/,
-];
-
-function isOriginAllowed(origin: string | undefined): boolean {
-  if (!origin) return false;
-  return allowedOrigins.some((o) =>
-    typeof o === "string" ? o === origin : o.test(origin)
-  );
-}
-
 app.use((req: any, res: any, next: any) => {
   const origin = req.headers.origin;
-  const allowOrigin = isOriginAllowed(origin) ? origin : "*";
-  res.setHeader("Access-Control-Allow-Origin", allowOrigin);
+  // Reflect the requesting origin so any Vercel frontend/preview works.
+  // Browsers require an exact origin (not "*") when credentials are enabled.
+  if (origin) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Vary", "Origin");
   res.setHeader(
