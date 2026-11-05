@@ -30,6 +30,9 @@ export interface IOrder extends Document {
     instructions?: string;
     method?: string;
   };
+  paymentReference?: string;
+  trackingNumber?: string;
+  coupon?: Types.ObjectId;
   paymentMethod?: "paystack" | "bank_transfer";
   bankTransferProof?: string;
   bankTransferDetails?: {
@@ -40,6 +43,8 @@ export interface IOrder extends Document {
     paidBy?: string;
     paidAt?: Date;
   };
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const orderSchema = new Schema<IOrder>(
