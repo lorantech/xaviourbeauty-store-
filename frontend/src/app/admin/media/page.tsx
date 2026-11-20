@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
+import { ClientOnly } from "@/components/ClientOnly";
 import {
   Plus,
   Image,
@@ -99,7 +100,8 @@ export default function AdminMedia() {
 
   return (
     <AdminLayout>
-      <div className="space-y-6">
+      <ClientOnly>
+        <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-serif font-bold text-primary-text">Media Library</h1>
@@ -182,8 +184,10 @@ export default function AdminMedia() {
                   <p className="text-sm text-muted-text mt-1">Upload your first image or video</p>
                 </div>
               )}
-            </div>
-          </AdminLayout>
-    )
-  );
+</div>
+          </ClientOnly>
+        </AdminLayout>
+      )
+    );
+  }
 }
