@@ -18,11 +18,16 @@ function XIcon({ size = 18 }: { size?: number }) {
 }
 
 export default function Footer() {
+  const whatsappNumber = "2348039630776";
+  const bankAccount = "1027152497";
+  const bankName = "UBA";
+  const accountName = "Xaviour Beauty Store Ventures";
+
   return (
     <footer className="bg-zinc-900 text-zinc-300 mt-20">
       <div className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-5 gap-8">
         <div className="md:col-span-2">
-          <img src="/xaviour-logo.jpg" onError={(e) => { const img = e.currentTarget as HTMLImageElement; if (img.src.includes('xaviour-logo')) img.src = '/xaviour%20logo.jpg'; }} alt="Xaviourbeautystore" className="h-12 w-auto mb-3 brightness-0 invert" />
+          <img src="/xaviour-logo.jpg" onError={(e) => { const img = e.currentTarget as HTMLImageElement; if (img.src.includes('xaviour-logo')) img.src = '/xaviour%20logo.jpg'; }} alt="Xaviourbeautystore" className="h-12 w-auto mb-3" />
           <p className="text-sm">Professional beauty, skincare, spa and salon equipment for professionals.</p>
           <div className="flex items-center gap-3 mt-4">
             <a href="https://www.facebook.com/xaviourbeautystore" target="_blank" rel="noopener noreferrer" className="hover:text-brand transition" aria-label="Facebook">
@@ -37,7 +42,7 @@ export default function Footer() {
             <a href="https://x.com/xaviourbeautystore" target="_blank" rel="noopener noreferrer" className="hover:text-brand transition" aria-label="X">
               <XIcon size={20} />
             </a>
-            <a href="https://wa.me/2348097513421" target="_blank" rel="noopener noreferrer" className="hover:text-brand transition" aria-label="WhatsApp">
+            <a href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="hover:text-brand transition" aria-label="WhatsApp">
               <MessageCircle size={20} />
             </a>
           </div>
@@ -58,11 +63,17 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <h4 className="text-white font-semibold mb-3">Contact</h4>
+          <h4 className="text-white font-semibold mb-3">Contact & Payment Info</h4>
           <ul className="space-y-2 text-sm">
             <li className="flex items-center gap-2"><Phone size={16} /> <a href="tel:+2348039630776" className="hover:text-brand">08039630776</a></li>
-            <li className="flex items-center gap-2"><MessageCircle size={16} /> <a href="https://wa.me/2348039630776" target="_blank" rel="noopener noreferrer" className="hover:text-brand">08039630776 (WhatsApp)</a></li>
+            <li className="flex items-center gap-2"><MessageCircle size={16} /> <a href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="hover:text-brand">WhatsApp: 08039630776</a></li>
             <li>support@xaviourbeautystore.com</li>
+            <li className="pt-2 border-t border-zinc-800">
+              <p className="font-medium text-white">Bank Transfer Details:</p>
+              <p className="text-xs text-zinc-400"><strong>Bank:</strong> {bankName}</p>
+              <p className="text-xs text-zinc-400"><strong>Account:</strong> {bankAccount}</p>
+              <p className="text-xs text-zinc-400"><strong>Name:</strong> {accountName}</p>
+            </li>
           </ul>
         </div>
       </div>
@@ -72,4 +83,3 @@ export default function Footer() {
     </footer>
   );
 }
-

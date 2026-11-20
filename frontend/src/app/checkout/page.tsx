@@ -114,7 +114,7 @@ export default function Checkout() {
           </button>
         </form>
 
-        {showBankModal && bankDetails && (
+{showBankModal && bankDetails && (
           <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg max-w-md w-full p-6 space-y-4">
               <h2 className="text-xl font-bold">Bank Transfer Details</h2>
@@ -125,7 +125,19 @@ export default function Checkout() {
                 <p><strong>Amount:</strong> ₦{(cart as any)?.total?.toLocaleString() || (cart as any)?.subtotal?.toLocaleString()}</p>
                 <p><strong>Order Reference:</strong> {orderId}</p>
               </div>
-              <p className="text-xs text-gray-600">Make transfer via ATM, USSD, or Bank App. After payment, go to your Account &gt; Orders and submit proof of payment (receipt/screenshot).</p>
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 space-y-3">
+                <p className="font-semibold text-amber-800 flex items-center gap-2">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 10-18 0 9 9 0 0018 0z" /><path d="M12 19.5a7.5 7.5 0 01-7.5-7.5 7.5 7.5 0 0115 0z" /></svg>
+                  <span>After Payment - Send Proof to WhatsApp</span>
+                </p>
+                <div className="space-y-2 text-sm text-amber-700">
+                  <p><strong>1.</strong> Complete the transfer using the details above</p>
+                  <p><strong>2.</strong> Take a screenshot of the successful transfer/receipt</p>
+                  <p><strong>3.</strong> Send screenshot to WhatsApp: <a href="https://wa.me/2348039630776" target="_blank" rel="noopener noreferrer" className="font-semibold underline hover:text-amber-900">08039630776</a></p>
+                  <p><strong>4.</strong> Include your <strong>Order Reference: {orderId}</strong> in the message</p>
+                </div>
+                <p className="text-xs text-amber-600">Your order will be confirmed once we verify the payment.</p>
+              </div>
               <div className="flex gap-2">
                 <button onClick={goToAccount} className="flex-1 bg-brand text-white py-2 rounded">Go to Orders</button>
                 <button onClick={() => setShowBankModal(false)} className="flex-1 border py-2 rounded">Close</button>
