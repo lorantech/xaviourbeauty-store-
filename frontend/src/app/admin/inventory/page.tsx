@@ -81,10 +81,6 @@ export default function AdminInventory() {
       return aVal < bVal ? 1 : -1;
     });
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN", minimumFractionDigits: 0 }).format(amount);
-  };
-
   if (user?.role !== "admin") return null;
 
   return (
@@ -239,75 +235,73 @@ export default function AdminInventory() {
                       <th className="pb-3">Price</th>
                       <th className="pb-3">Stock Value</th>
                       <th className="pb-3">Actions</th>
-</tr>
-                    </thead>
-                    <tbody>
-                  {products.map((product) => {
-                    const stock = product.stockQuantity;
-                    const status = stock === 0 ? { label: "Out of Stock", color: "bg-red-100 text-red-700", icon: "out" } :
-                                   stock < 5 ? { label: "Low Stock", color: "bg-amber-100 text-amber-700", icon: "low" } :
-                                               { label: "In Stock", color: "bg-emerald-100 text-emerald-700", icon: "in" };
-                    return (
-                      <tr key={product._id} className="border-b border-light-border/50 dark:border-gray-700/50 hover:bg-muted/50 transition-colors">
-                        <td className="py-4">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center overflow-hidden flex-shrink-0">
-                              {product.images?.[0] ? (
-                                <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
-                              ) : (
-                                <svg className="w-5 h-5 text-muted-text" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>
-                              )}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {products.map((product) => {
+                      const stock = product.stockQuantity;
+                      return (
+                        <tr key={product._id} className="border-b border-light-border/50 dark:border-gray-700/50 hover:bg-muted/50 transition-colors">
+                          <td className="py-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center overflow-hidden flex-shrink-0">
+                                {product.images?.[0] ? (
+                                  <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
+                                ) : (
+                                  <svg className="w-5 h-5 text-muted-text" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>
+                                )}
+                              </div>
+                              <div>
+                                <p className="font-medium text-primary-text truncate max-w-xs">{product.name}</p>
+                                <p className="text-xs text-muted-text">{product.sku || "No SKU"}</p>
+                              </div>
                             </div>
-                            <div>
-                              <p className="font-medium text-primary-text truncate max-w-xs">{product.name}</p>
-                              <p className="text-xs text-muted-text">{product.sku || "No SKU"}</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="font-mono text-sm font-medium text-primary-text">{product.stockQuantity}</td>
-                        <td>
-                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                            product.stockQuantity === 0 ? "bg-red-100 text-red-700" :
-                            product.stockQuantity < 5 ? "bg-amber-100 text-amber-700" :
-                            "bg-emerald-100 text-emerald-700"
-                          }`}>
-                            {product.stockQuantity === 0 ? "Out of Stock" : product.stockQuantity < 5 ? "Low Stock" : "In Stock"}
-                          </span>
-                        </td>
-                        <td className="font-medium text-primary-text">{new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN", minimumFractionDigits: 0 }).format(product.price)}</td>
-                        <td className="font-medium text-primary-text">{new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN", minimumFractionDigits: 0 }).format(product.price * product.stockQuantity)}</td>
-                        <td>
-                          <input
-                            type="number"
-                            min="0"
-                            value={0}
-                            onChange={(e) => {
-                              const newStock = Number(e.target.value);
-                              if (newStock !== undefined) handleStockUpdate(product, newStock);
-                            }}
-                            className="w-20 px-2 py-1.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm text-primary-text text-right focus:outline-none focus:ring-2 focus:ring-soft-gold"
-                            placeholder={product.stockQuantity.toString()}
-                          />
-                        </td>
-                      </tr>
-)}
-                    {products.length === 0 && (
-                      <tr>
-                        <td colSpan={6} className="py-12 text-center text-muted-text">
-                          <svg className="w-12 h-12 mx-auto text-muted-text/50 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                            <circle cx="8.5" cy="8.5" r="1.5" />
-                            <polyline points="21 15 16 10 5 21" />
-                          </svg>
-                          <p className="text-primary-text font-medium">No products in inventory</p>
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </>
-          )}
+                          </td>
+                          <td className="font-mono text-sm font-medium text-primary-text">{product.stockQuantity}</td>
+                          <td>
+                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                              product.stockQuantity === 0 ? "bg-red-100 text-red-700" :
+                              product.stockQuantity < 5 ? "bg-amber-100 text-amber-700" :
+                              "bg-emerald-100 text-emerald-700"
+                            }`}>
+                              {product.stockQuantity === 0 ? "Out of Stock" : product.stockQuantity < 5 ? "Low Stock" : "In Stock"}
+                            </span>
+                          </td>
+                          <td className="font-medium text-primary-text">{new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN", minimumFractionDigits: 0 }).format(product.price)}</td>
+                          <td className="font-medium text-primary-text">{new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN", minimumFractionDigits: 0 }).format(product.price * product.stockQuantity)}</td>
+                          <td>
+                            <input
+                              type="number"
+                              min="0"
+                              value={0}
+                              onChange={(e) => {
+                                const newStock = Number(e.target.value);
+                                if (newStock !== undefined) handleStockUpdate(product, newStock);
+                              }}
+                              className="w-20 px-2 py-1.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm text-primary-text text-right focus:outline-none focus:ring-2 focus:ring-soft-gold"
+                              placeholder={product.stockQuantity.toString()}
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                      {products.length === 0 && (
+                        <tr>
+                          <td colSpan={6} className="py-12 text-center text-muted-text">
+                            <svg className="w-12 h-12 mx-auto text-muted-text/50 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
+                              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                              <circle cx="8.5" cy="8.5" r="1.5" />
+                              <polyline points="21 15 16 10 5 21" />
+                            </svg>
+                            <p className="text-primary-text font-medium">No products in inventory</p>
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </AdminLayout>
     )
