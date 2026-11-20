@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
+import { ClientOnly } from "@/components/ClientOnly";
 import {
   Plus,
   Edit,
@@ -188,7 +189,8 @@ export default function AdminBanners() {
 
   return (
     <AdminLayout>
-      <div className="space-y-6">
+      <ClientOnly>
+        <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-serif font-bold text-primary-text">Promotional Banners</h1>
@@ -363,8 +365,8 @@ export default function AdminBanners() {
                   </form>
                 </div>
               </div>
-            )}
-          </AdminLayout>
-        )
-      );
+)}
+      </ClientOnly>
+    </AdminLayout>
+  );
 }
