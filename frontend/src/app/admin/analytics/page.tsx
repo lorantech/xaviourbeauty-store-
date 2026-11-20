@@ -213,7 +213,7 @@ export default function AdminAnalytics() {
             </div>
           </>
         )}
-      </AdminLayout>
+</AdminLayout>
     )
   };
 }

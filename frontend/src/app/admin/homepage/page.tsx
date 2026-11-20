@@ -104,45 +104,48 @@ export default function AdminHomepage() {
                   )}
                 </div>
 
-{section.key === "hero" && (
-        <div className={isEditing ? "p-6 space-y-4" : "p-6"}>
-          {isEditing ? (
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-primary-text mb-1.5">Headline</label>
-                <input value={sectionForm.headline || ""} onChange={(e) => setSectionForm({ ...sectionForm, headline: e.target.value })} className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm text-primary-text focus:outline-none focus:ring-2 focus:ring-soft-gold" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-primary-text mb-1.5">Subheadline</label>
-                <textarea rows={2} value={sectionForm.subheadline || ""} onChange={(e) => setSectionForm({ ...sectionForm, subheadline: e.target.value })} className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm text-primary-text focus:outline-none focus:ring-2 focus:ring-soft-gold" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-primary-text mb-1.5">CTA Text</label>
-                <input value={sectionForm.ctaText || ""} onChange={(e) => setSectionForm({ ...sectionForm, ctaText: e.target.value })} className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm text-primary-text focus:outline-none focus:ring-2 focus:ring-soft-gold" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-primary-text mb-1.5">CTA Link</label>
-                <input value={sectionForm.ctaLink || ""} onChange={(e) => setSectionForm({ ...sectionForm, ctaLink: e.target.value })} className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm text-primary-text focus:outline-none focus:ring-2 focus:ring-soft-gold" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-primary-text mb-1.5">Background Image</label>
-                <div className="flex items-center gap-4">
-                  <div className="relative w-32 h-20 rounded-lg bg-muted overflow-hidden flex-shrink-0">
-                    {sectionForm.backgroundImage ? <img src={sectionForm.backgroundImage} alt="Preview" className="w-full h-full object-cover" /> : <svg className="w-8 h-8 text-muted-text mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>}
+                {section.key === "hero" && (
+                  <div className={isEditing ? "p-6 space-y-4" : "p-6"}>
+                    {isEditing ? (
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium text-primary-text mb-1.5">Headline</label>
+                          <input value={sectionForm.headline || ""} onChange={(e) => setSectionForm({ ...sectionForm, headline: e.target.value })} className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm text-primary-text focus:outline-none focus:ring-2 focus:ring-soft-gold" />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-primary-text mb-1.5">Subheadline</label>
+                          <textarea rows={2} value={sectionForm.subheadline || ""} onChange={(e) => setSectionForm({ ...sectionForm, subheadline: e.target.value })} className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm text-primary-text focus:outline-none focus:ring-2 focus:ring-soft-gold" />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-primary-text mb-1.5">CTA Text</label>
+                          <input value={sectionForm.ctaText || ""} onChange={(e) => setSectionForm({ ...sectionForm, ctaText: e.target.value })} className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm text-primary-text focus:outline-none focus:ring-2 focus:ring-soft-gold" />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-primary-text mb-1.5">CTA Link</label>
+                          <input value={sectionForm.ctaLink || ""} onChange={(e) => setSectionForm({ ...sectionForm, ctaLink: e.target.value })} className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm text-primary-text focus:outline-none focus:ring-2 focus:ring-soft-gold" />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-primary-text mb-1.5">Background Image</label>
+                          <div className="flex items-center gap-4">
+                            <div className="relative w-32 h-20 rounded-lg bg-muted overflow-hidden flex-shrink-0">
+                              {sectionForm.backgroundImage ? <img src={sectionForm.backgroundImage} alt="Preview" className="w-full h-full object-cover" /> : <svg className="w-8 h-8 text-muted-text mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>}
+                            </div>
+                            <label className="cursor-pointer bg-muted hover:bg-muted/80 px-4 py-2 rounded-lg text-sm font-medium text-primary-text transition-colors">Upload Image<input type="file" accept="image/*" onChange={(e) => e.target.files && setSectionForm({ ...sectionForm, backgroundImage: URL.createObjectURL(e.target.files[0]) })} className="hidden" /></label>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        {data.headline && <h4 className="text-xl font-semibold text-primary-text">{data.headline}</h4>}
+                        {data.subheadline && <p className="text-muted-text">{data.subheadline}</p>}
+                        {data.ctaText && <a href={data.ctaLink} className="inline-flex items-center gap-2 px-4 py-2 bg-primary-forest-green hover:bg-secondary-forest-green text-white rounded-lg font-medium transition-colors">{data.ctaText} <ChevronRight className="w-4 h-4" /></a>}
+                      </div>
+                    )}
                   </div>
-                  <label className="cursor-pointer bg-muted hover:bg-muted/80 px-4 py-2 rounded-lg text-sm font-medium text-primary-text transition-colors">Upload Image<input type="file" accept="image/*" onChange={(e) => e.target.files && setSectionForm({ ...sectionForm, backgroundImage: URL.createObjectURL(e.target.files[0]) })} className="hidden" /></label>
-                </div>
+                )}
               </div>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {data.headline && <h4 className="text-xl font-semibold text-primary-text">{data.headline}</h4>}
-              {data.subheadline && <p className="text-muted-text">{data.subheadline}</p>}
-              {data.ctaText && <a href={data.ctaLink} className="inline-flex items-center gap-2 px-4 py-2 bg-primary-forest-green hover:bg-secondary-forest-green text-white rounded-lg font-medium transition-colors">{data.ctaText} <ChevronRight className="w-4 h-4" /></a>}
-            </div>
-          )}
-        </div>
-      )}
+            );
+          })}
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-xl border border-light-border dark:border-gray-700 p-6">
