@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
-import { ClientOnly } from "@/components/ClientOnly";
 import {
   Plus,
   Search,
@@ -231,8 +230,7 @@ export default function AdminProducts() {
 
   return (
     <AdminLayout>
-      <ClientOnly>
-        <div className="space-y-6">
+      <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-serif font-bold text-primary-text">Products</h1>
@@ -501,7 +499,7 @@ export default function AdminProducts() {
             </div>
           </div>
         )}
-      </ClientOnly>
-    </AdminLayout>
-  );
+      </AdminLayout>
+    )
+  };
 }

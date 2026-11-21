@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
-import { ClientOnly } from "@/components/ClientOnly";
 import {
   Plus,
   Edit,
@@ -74,8 +73,7 @@ export default function AdminHomepage() {
 
   return (
     <AdminLayout>
-      <ClientOnly>
-        <div className="space-y-6">
+      <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-serif font-bold text-primary-text">Homepage Content</h1>
@@ -170,9 +168,8 @@ export default function AdminHomepage() {
               <p className="text-muted-text text-sm text-center px-4">Featured Products</p>
             </div>
           </div>
-        </div>
-      </ClientOnly>
+</div>
       </AdminLayout>
     )
-  );
+  };
 }

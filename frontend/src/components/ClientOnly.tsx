@@ -13,5 +13,5 @@ export function ClientOnly({ children }: { children: React.ReactNode }) {
     return null;
   }
 
-  return <>{children}</>;
+  return <div>{children}</div>;
 }

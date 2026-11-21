@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
-import { ClientOnly } from "@/components/ClientOnly";
 import {
   Bell,
   ShoppingCart,
@@ -179,8 +178,8 @@ export default function AdminNotifications() {
             </>
           )}
         </div>
-</ClientOnly>
-      </AdminLayout>
-    )
-  };
+}
+        </AdminLayout>
+      )
+    };
 }
