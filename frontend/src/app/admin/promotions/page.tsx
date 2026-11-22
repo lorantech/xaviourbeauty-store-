@@ -340,9 +340,8 @@ if (user?.role !== "admin") return null;
               </form>
             </div>
           </div>
-        )}
+)}
       </AdminLayout>
-      </ClientOnly>
     )
-  );
+  };
 }

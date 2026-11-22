@@ -365,7 +365,7 @@ export default function AdminBanners() {
                 </div>
               </div>
 )}
-        </ClientOnly>
+        </div>
       </AdminLayout>
     )
   };

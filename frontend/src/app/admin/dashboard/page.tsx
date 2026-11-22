@@ -303,9 +303,8 @@ export default function AdminDashboard() {
               </div>
             </div>
           </>
-        )}
-</AdminLayout>
-      </ClientOnly>
+)}
+      </AdminLayout>
     )
   };
 }

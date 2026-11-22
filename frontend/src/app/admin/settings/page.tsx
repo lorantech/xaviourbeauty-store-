@@ -523,7 +523,7 @@ export default function AdminSettings() {
           </div>
         </div>
 </AdminLayout>
-      </ClientOnly>
+      
     )
   };
 }

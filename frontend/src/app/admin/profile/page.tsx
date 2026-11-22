@@ -130,7 +130,7 @@ export default function AdminProfile() {
 
   return (
     <AdminLayout>
-      <ClientOnly>
+      
         <div className="space-y-6">
           {message && (
             <div className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg animate-in slide-in-from-top-2 ${message.type === "success" ? "bg-emerald-500 text-white" : "bg-red-500 text-white"}`}>
@@ -323,9 +323,9 @@ export default function AdminProfile() {
                 </div>
               )}
 
-            }
-        </ClientOnly>
-      </AdminLayout>
+}
+          </div>
+        </AdminLayout>
       )
     };
   }

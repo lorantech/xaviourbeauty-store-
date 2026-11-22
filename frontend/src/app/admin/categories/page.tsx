@@ -265,11 +265,8 @@ export default function AdminCategories() {
                   </div>
                 </div>
 )}
-            </>
-          )}
-        </div>
-      </AdminLayout>
-      </ClientOnly>
+          </div>
+        </AdminLayout>
     )
   };
 }

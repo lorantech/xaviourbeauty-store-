@@ -165,8 +165,8 @@ export default function AdminReports() {
                 </table>
               </div>
 </div>
-          </ClientOnly>
-        </AdminLayout>
+          
+        </div>\n      </AdminLayout>
       )
     };
 }

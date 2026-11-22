@@ -308,7 +308,7 @@ export default function AdminInventory() {
               )}
             </div>
           </div>
-</ClientOnly>
+
       </AdminLayout>
     )
   };
