@@ -106,7 +106,7 @@ export default function AdminReviews() {
             <>
               <div className="space-y-3">
                 {reviews.map((review) => (
-                  <div key={review._id} className={`p-4 rounded-lg border border-light-border dark:border-gray-700 ${review.status === "pending" ? "bg-amber-50 dark:bg-amber-900/20" : review.status === "rejected" ? "bg-red-50 dark:bg-red-900/20" : "bg-white dark:bg-gray-800"}`}>
+                  <div key={review._id} className={`p-4 rounded-lg border border-light-border dark:border-gray-700 ${review.status === "pending" ? "bg-amber-50 dark:bg-amber-900" : review.status === "rejected" ? "bg-red-50 dark:bg-red-900" : "bg-white dark:bg-gray-800"}`}>
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <Star className="w-5 h-5 text-amber-500 fill-current" />

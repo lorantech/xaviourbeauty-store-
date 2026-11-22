@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AdminLayout } from "@/components/AdminLayout";
+import AdminLayout from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -19,7 +19,7 @@ import {
   Clock,
 } from "lucide-react";
 
-const notificationTypes = {
+const notificationTypes: Record<string, { icon: any; color: string; label: string }> = {
   new_order: { icon: ShoppingCart, color: "bg-blue-100 text-blue-700", label: "New Order" },
   payment_received: { icon: CreditCard, color: "bg-emerald-100 text-emerald-700", label: "Payment Received" },
   low_stock: { icon: AlertTriangle, color: "bg-amber-100 text-amber-700", label: "Low Stock" },
@@ -87,8 +87,7 @@ export default function AdminNotifications() {
 
   return (
     <AdminLayout>
-      <ClientOnly>
-        <div className="space-y-6">
+      <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-serif font-bold text-primary-text">Notifications</h1>
@@ -141,7 +140,7 @@ export default function AdminNotifications() {
                     const typeInfo = notificationTypes[notification.type] || { icon: Bell, color: "bg-gray-100 text-gray-700", label: "Notification" };
                     const Icon = typeInfo.icon;
                     return (
-                      <div key={notification._id} className={`flex items-start gap-4 p-4 transition-colors ${notification.read ? "" : "bg-blue-50 dark:bg-blue-900/20"}`}>
+                      <div key={notification._id} className={"flex items-start gap-4 p-4 transition-colors " + (notification.read ? "" : "bg-blue-50 dark:bg-blue-900")}>
                         <div className={`p-2 rounded-lg ${typeInfo.color} flex-shrink-0`}>
                           <Icon className="w-5 h-5" strokeWidth={2} />
                         </div>
@@ -153,16 +152,16 @@ export default function AdminNotifications() {
                           <p className="text-sm text-primary-text mt-1">{notification.message}</p>
                           {notification.data && (
                             <div className="mt-2 flex flex-wrap gap-1">
-                              {Object.entries(notification.data).map(([key, value]) => (
+                              {Object.entries(notification.data as Record<string, string>).map(([key, value]) => (
                                 <span key={key} className="px-2 py-0.5 bg-muted rounded text-xs text-muted-text">{key}: {value}</span>
                               ))}
                             </div>
                           </div>
                         <div className="flex items-center gap-2">
                           {!notification.read && (
-                            <button onClick={() => markAsRead(notification._id)} className="px-3 py-1.5 text-xs font-medium text-primary-forest-green hover:bg-primary-forest-green/10 rounded-lg transition-colors">Mark as read</button>
+                            <button onClick={() => markAsRead(notification._id)} className="px-3 py-1.5 text-xs font-medium text-primary-forest-green hover:bg-primary-forest-green rounded-lg transition-colors">Mark as read</button>
                           )}
-                          <button onClick={() => deleteNotification(notification._id)} className="px-3 py-1.5 text-xs font-medium text-red-500 hover:bg-red-50 dark:bg-red-900/20 rounded-lg transition-colors">Delete</button>
+                          <button onClick={() => deleteNotification(notification._id)} className="px-3 py-1.5 text-xs font-medium text-red-500 hover:bg-red-50 dark:bg-red-900 rounded-lg transition-colors">Delete</button>
                         </div>
                       </div>
                     );
@@ -176,10 +175,9 @@ export default function AdminNotifications() {
                 </div>
               )}
             </>
-          )}
+          }
         </div>
-}
-        </AdminLayout>
-      )
-    };
+    </AdminLayout>
+    )
+  };
 }
