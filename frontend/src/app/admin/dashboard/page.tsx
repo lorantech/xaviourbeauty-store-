@@ -6,6 +6,7 @@ import Link from "next/link";
 import { AdminLayout } from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
+import { ClientOnly } from "@/components/ClientOnly";
 import {
   Package,
   ShoppingCart,
