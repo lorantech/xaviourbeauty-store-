@@ -323,7 +323,8 @@ export default function AdminProfile() {
               )}
 
             }
-        </AdminLayout>
+        </ClientOnly>
+      </AdminLayout>
       )
     };
   }

@@ -147,7 +147,8 @@ export default function AdminReviews() {
             </>
           )}
         </div>
-      </AdminLayout>
+</AdminLayout>
+      </ClientOnly>
     )
-  );
+  };
 }

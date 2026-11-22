@@ -272,7 +272,7 @@ export default function AdminCustomers() {
           </div>
 )}
         </AdminLayout>
+      </ClientOnly>
     )
-    ;
-  }
+  };
 }
