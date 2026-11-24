@@ -1,12 +1,14 @@
 import axios from "axios";
 
-// Backend base URL. Reads from Vercel env var NEXT_PUBLIC_API_URL (or
-// NEXT_PUBLIC_API_BASE_URL). Falls back to your live production backend.
-const API_BASE = (
-  (process.env.NEXT_PUBLIC_API_URL ||
-    process.env.NEXT_PUBLIC_API_BASE_URL ||
-    "https://backend-gng5aslhl-loran4.vercel.app").replace(/\/$/, "") + "/api"
-);
+// Accept either a backend origin or an API base URL from the deployment environment.
+const configuredApiUrl =
+  process.env.NEXT_PUBLIC_API_URL ||
+  process.env.NEXT_PUBLIC_API_BASE_URL ||
+  "https://xaviourbeauty-store.vercel.app";
+const normalizedApiUrl = configuredApiUrl.replace(/\/+$/, "");
+const API_BASE = /\/api$/i.test(normalizedApiUrl)
+  ? normalizedApiUrl
+  : `${normalizedApiUrl}/api`;
 
 export const api = axios.create({
   baseURL: API_BASE,
