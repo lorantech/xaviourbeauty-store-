@@ -67,7 +67,7 @@ export default function AdminProducts() {
     try {
       const [productsRes, categoriesRes] = await Promise.all([
         api.get("/products", { params: { limit: 100, status: statusFilter || undefined, category: categoryFilter || undefined, includeAll: "true" } }),
-        api.get("/categories"),
+        api.get("/categories/all"),
       ]);
       let productsData = productsRes.data.items || [];
       if (search) {
