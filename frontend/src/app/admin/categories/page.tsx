@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AdminLayout } from "@/components/AdminLayout";
+import AdminLayout from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
-import { ClientOnly } from "@/components/ClientOnly";
 import {
   Plus,
   Edit,
@@ -110,7 +109,7 @@ export default function AdminCategories() {
   };
 
   const deleteCategory = async (id: string) => {
-    if (!confirm("Delete this category? This will also affect products in this category.")) return;
+    if (!confirm("Delete this category?")) return;
     setDeletingId(id);
     try {
       await api.delete(`/categories/${id}`);
@@ -128,14 +127,6 @@ export default function AdminCategories() {
     setImagePreview(null);
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-      setImagePreview(URL.createObjectURL(file));
-    }
-  };
-
   if (user?.role !== "admin") return null;
 
   return (
@@ -146,7 +137,7 @@ export default function AdminCategories() {
             <h1 className="text-3xl font-serif font-bold text-primary-text">Categories</h1>
             <p className="text-muted-text mt-1">Manage product categories</p>
           </div>
-          <button onClick={() => { setEditingCategory(null); setForm({ name: "", description: "", image: "", parentCategory: "", isActive: true }); setShowForm(true); }} className="bg-primary-forest-green hover:bg-secondary-forest-green text-white px-4 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors">
+          <button onClick={() => { setEditingCategory(null); resetForm(); setShowForm(true); }} className="bg-primary-forest-green hover:bg-secondary-forest-green text-white px-4 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors">
             <Plus className="w-5 h-5" />
             Add Category
           </button>
@@ -183,7 +174,7 @@ export default function AdminCategories() {
                       {category.image ? (
                         <img src={category.image} alt={category.name} className="w-full h-full object-cover" />
                       ) : (
-                        <svg className="w-6 h-6 text-muted-text" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7a2 2 0 010-2.828l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75c0 .617.232.837.617.983l.99.99.007.007.014.014.014.014a22.064 22.064 0 010 4.074l-.014.014-.014.014-.014.014-.007.007-.007.007-.99.99a2 2 0 01-.983.617H6a2 2 0 01-2-2V6a2 2 0 012-2h5.586a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 010-1.414l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75c0 .617.232.837.617.983l.99.99.007.007.014.014.014.014a22.064 22.064 0 010 4.074l-.014.014-.014.014-.014.014-.007.007-.007.007-.99.99a2 2 0 01-.983.617H6a2 2 0 01-2-2V6a2 2 0 012-2h5.586a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 010-1.414l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75c0 .617.232.837.617.983l.99.99.007.007.014.014.014.014a22.064 22.064 0 010 4.074l-.014.014-.014.014-.014.014-.007.007-.007.007-.99.99a2 2 0 01-.983.617H6a2 2 0 01-2-2V6a2 2 0 012-2h5.586a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 010-1.414l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75c0 .617.232.837.617.983l.99.99.007.007.014.014.014.014a22.064 22.064 0 010 4.074l-.014.014-.014.014-.014.014-.007.007-.007.007-.99.99a2 2 0 01-.983.617H6a2 2 0 01-2-2V6a2 2 0 012-2h5.586a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 010-1.414l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75" /></svg>
+                        <svg className="w-6 h-6 text-muted-text" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7a2 2 0 01-2.828 0l-7-7a2 2 0 010-2.828l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75c0 .617.232.837.617.983l.99.99.007.007.014.014.014.014a22.064 22.064 0 010 4.074l-.014.014-.014.014-.014.014-.007.007-.007.007-.99.99a2 2 0 01-.983.617H6a2 2 0 01-2-2V6a2 2 0 012-2h5.586a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75c0 .617.232.837.617.983l.99.99.007.007.014.014.014.014a22.064 22.064 0 010 4.074l-.014.014-.014.014-.014.014-.007.007-.007.007-.99.99a2 2 0 01-.983.617H6a2 2 0 01-2-2V6a2 2 0 012-2h5.586a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 010-1.414l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75c0 .617.232.837.617.983l.99.99.007.007.014.014.014.014a22.064 22.064 0 010 4.074l-.014.014-.014.014-.014.014-.007.007-.007.007-.99.99a2 2 0 01-.983.617H6a2 2 0 01-2-2V6a2 2 0 012-2h5.586a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75c0 .617.232.837.617.983l.99.99.007.007.014.014.014.014a22.064 22.064 0 010 4.074l-.014.014-.014.014-.014.014-.007.007-.007.007-.99.99a2 2 0 01-.983.617H6a2 2 0 01-2-2V6a2 2 0 012-2h5.586a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75c0 .617.232.837.617.983l.99.99.007.007.014.014.014.014a22.064 22.064 0 010 4.074l-.014.014-.014.014-.014.014-.007.007-.007.007-.99.99a2 2 0 01-.983.617H6a2 2 0 01-2-2V6a2 2 0 012-2h5.586a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75c0 .617.232.837.617.983l.99.99.007.007.014.014.014.014a22.064 22.064 0 010 4.074l-.014.014-.014.014-.014.014-.007.007-.007.007-.99.99a2 2 0 01-.983.617H6a2 2 0 01-2-2V6a2 2 0 012-2h5.586a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75c0 .617.232.837.617.983l.99.99.007.007.014.014.014.014a22.064 22.064 0 010 4.074l-.014.014-.014.014-.014.014-.007.007-.007.007-.99.99a2 2 0 01-.983.617H6a2 2 0 01-2-2V6a2 2 0 012-2h5.586a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 010-1.414l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75" /></svg>
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -205,12 +196,14 @@ export default function AdminCategories() {
                 ))}
                 {categories.length === 0 && (
                   <div className="py-12 text-center text-muted-text">
-                    <svg className="w-12 h-12 mx-auto text-muted-text/50 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5"><path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7a2 2 0 010-2.828l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75c0 .617.232.837.617.983l.99.99.007.007.014.014.014.014a22.064 22.064 0 010 4.074l-.014.014-.014.014-.014.014-.007.007-.007.007-.99.99a2 2 0 01-.983.617H6a2 2 0 01-2-2V6a2 2 0 012-2h5.586a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 010-1.414l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75c0 .617.232.837.617.983l.99.99.007.007.014.014.014.014a22.064 22.064 0 010 4.074l-.014.014-.014.014-.014.014-.007.007-.007.007-.99.99a2 2 0 01-.983.617H6a2 2 0 01-2-2V6a2 2 0 012-2h5.586a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 010-1.414l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75" /></svg>
+                    <svg className="w-12 h-12 mx-auto text-muted-text/50 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5"><path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7a2 2 0 01-2.828 0l-7-7a2 2 0 010-2.828l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75c0 .617.232.837.617.983l.99.99.007.007.014.014.014.014a22.064 22.064 0 010 4.074l-.014.014-.014.014-.014.014-.007.007-.007.007-.99.99a2 2 0 01-.983.617H6a2 2 0 01-2-2V6a2 2 0 012-2h5.586a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75c0 .617.232.837.617.983l.99.99.007.007.014.014.014.014a22.064 22.064 0 010 4.074l-.014.014-.014.014-.014.014-.007.007-.007.007-.99.99a2 2 0 01-.983.617H6a2 2 0 01-2-2V6a2 2 0 012-2h5.586a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75c0 .617.232.837.617.983l.99.99.007.007.014.014.014.014a22.064 22.064 0 010 4.074l-.014.014-.014.014-.014.014-.007.007-.007.007-.99.99a2 2 0 01-.983.617H6a2 2 0 01-2-2V6a2 2 0 012-2h5.586a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75c0 .617.232.837.617.983l.99.99.007.007.014.014.014.014a22.064 22.064 0 010 4.074l-.014.014-.014.014-.014.014-.007.007-.007.007-.99.99a2 2 0 01-.983.617H6a2 2 0 01-2-2V6a2 2 0 012-2h5.586a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75c0 .617.232.837.617.983l.99.99.007.007.014.014.014.014a22.064 22.064 0 010 4.074l-.014.014-.014.014-.014.014-.007.007-.007.007-.99.99a2 2 0 01-.983.617H6a2 2 0 01-2-2V6a2 2 0 012-2h5.586a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75c0 .617.232.837.617.983l.99.99.007.007.014.014.014.014a22.064 22.064 0 010 4.074l-.014.014-.014.014-.014.014-.007.007-.007.007-.99.99a2 2 0 01-.983.617H6a2 2 0 01-2-2V6a2 2 0 012-2h5.586a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l-7-7a1 1 0 01-1.414 0l7-7c.512-.512 1.024-.786 1.414-1.06V3a2 2 0 012-2h6a2 2 0 012 2v6.75" /></svg>
                     <p className="text-primary-text font-medium">No categories yet</p>
                     <p className="text-sm text-muted-text mt-1">Create your first category to organize products</p>
                   </div>
                 )}
               </div>
+            </>
+          )}
 
               {/* Category Form Modal */}
               {showForm && (
@@ -224,11 +217,11 @@ export default function AdminCategories() {
                     <form onSubmit={handleSubmit} className="p-6 space-y-5">
                       <div>
                         <label className="block text-sm font-medium text-primary-text mb-1.5">Category Name *</label>
-                        <input required placeholder="Category name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm text-primary-text placeholder:text-muted-text focus:outline-none focus:ring-2 focus:ring-soft-gold focus:border-transparent" />
+                        <input required placeholder="Category name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm text-primary-text focus:outline-none focus:ring-2 focus:ring-soft-gold" />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-primary-text mb-1.5">Description</label>
-                        <textarea rows={3} placeholder="Category description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm text-primary-text placeholder:text-muted-text focus:outline-none focus:ring-2 focus:ring-soft-gold" />
+                        <textarea rows={3} placeholder="Category description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm text-primary-text focus:outline-none focus:ring-2 focus:ring-soft-gold" />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-primary-text mb-1.5">Category Image</label>
@@ -241,10 +234,8 @@ export default function AdminCategories() {
                             )}
                           </div>
                           <div>
-                            <input type="file" accept="image/*" onChange={(e) => e.target.files && setImageFile(e.target.files[0])} className="hidden" id="category-image-input" ref={(el) => el && el.click()} />
-                            <label htmlFor="category-image-input" className="cursor-pointer bg-muted hover:bg-muted/80 px-4 py-2 rounded-lg text-sm font-medium text-primary-text transition-colors">
-                              {imageFile ? "Change Image" : "Upload Image"}
-                            </label>
+                            <input type="file" accept="image/*" onChange={(e) => e.target.files && setImageFile(e.target.files[0])} className="hidden" id="category-image-input" />
+                            <label htmlFor="category-image-input" className="cursor-pointer bg-muted hover:bg-muted/80 px-4 py-2 rounded-lg text-sm font-medium text-primary-text transition-colors">{imageFile ? "Change Image" : "Upload Image"}</label>
                           </div>
                         </div>
                       </div>
@@ -254,19 +245,12 @@ export default function AdminCategories() {
                           <span className="text-sm text-primary-text">Active</span>
                         </label>
                       </div>
-                      <div className="flex items-center justify-end gap-3 pt-4 border-t border-light-border dark:border-gray-700">
-                        <button type="button" onClick={() => { setShowForm(false); setEditingCategory(null); resetForm(); }} className="px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm font-medium text-primary-text hover:bg-muted transition-colors">Cancel</button>
-                        <button type="submit" disabled={saving} className="px-4 py-2.5 bg-primary-forest-green hover:bg-secondary-forest-green text-white font-medium rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" /><polyline points="17 21 17 13 7 13 7 21" /><polyline points="7 3 7 8 15 8" /></svg>
-                          {saving ? "Saving..." : "Save Category"}
-                        </button>
-                      </div>
                     </form>
                   </div>
                 </div>
-)}
-          </div>
-        </AdminLayout>
-    )
-  };
+            )}
+        </div>
+      </div>
+    </AdminLayout>
+  );
 }

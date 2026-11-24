@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AdminLayout } from "@/components/AdminLayout";
+import AdminLayout from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { ClientOnly } from "@/components/ClientOnly";
@@ -172,19 +172,6 @@ export default function AdminBanners() {
     setMobileImagePreview(null);
   };
 
-  const handleImageUpload = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (field === "image") {
-        setImageFile(file);
-        setImagePreview(URL.createObjectURL(file));
-      } else {
-        setMobileImageFile(file);
-        setMobileImagePreview(URL.createObjectURL(file));
-      }
-    }
-  };
-
   if (user?.role !== "admin") return null;
 
   return (
@@ -266,7 +253,7 @@ export default function AdminBanners() {
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-primary-text mb-1.5">Title *</label>
-                      <input required placeholder="Banner title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm text-primary-text focus:outline-none focus:ring-2 focus:ring-soft-gold" />
+                      <input required placeholder="Banner title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm text-primary-text focus:outline-none focus:ring-2 focus:ring-soft-gold focus:border-transparent" />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-primary-text mb-1.5">Subtitle</label>
@@ -354,19 +341,20 @@ export default function AdminBanners() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center justify-end gap-3 pt-4 border-t border-light-border dark:border-gray-700">
+                    <div className="flex items-center justify-end gap-3 pt-6 border-t border-light-border dark:border-gray-700">
                       <button type="button" onClick={() => { setShowForm(false); setEditing(null); resetForm(); }} className="px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm font-medium text-primary-text hover:bg-muted transition-colors">Cancel</button>
                       <button type="submit" disabled={saving} className="px-4 py-2.5 bg-primary-forest-green hover:bg-secondary-forest-green text-white font-medium rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" /><polyline points="17 21 17 13 7 13 7 21" /><polyline points="7 3 7 8 15 8" /></svg>
+                        {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                         {saving ? "Saving..." : editing ? "Update" : "Create"}
                       </button>
                     </div>
-                  </form>
+                  </div>
                 </div>
-              </div>
-)}
-        </div>
-      </AdminLayout>
-    )
-  };
+              </form>
+            </div>
+          </div>
+        )}
+      </div>
+    </AdminLayout>
+  );
 }

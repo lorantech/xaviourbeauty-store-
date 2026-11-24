@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AdminLayout } from "@/components/AdminLayout";
+import AdminLayout from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
-import { ClientOnly } from "@/components/ClientOnly";
 import {
   Plus,
   Image,
@@ -152,41 +151,46 @@ export default function AdminMedia() {
                     {previewUrls.map((url, i) => (
                       <div key={i} className="relative aspect-square bg-white dark:bg-gray-800 rounded-lg overflow-hidden border border-light-border dark:border-gray-700">
                         <img src={url} alt="Preview" className="w-full h-32 object-cover" />
-                        <button onClick={() => { setPreviewUrls((prev) => prev.filter((_, i) => i !== index)); setSelectedFiles((prev) => prev.filter((_, i) => i !== index)); }} className="absolute top-1 right-1 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center text-xs hover:bg-red-600"><X className="w-3.5 h-3.5" /></button>
+                        <button onClick={() => { setPreviewUrls((prev) => prev.filter((_, idx) => idx !== i)); setSelectedFiles((prev) => prev.filter((_, idx) => idx !== i)); }} className="absolute top-1 right-1 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center text-xs hover:bg-red-600"><X className="w-3.5 h-3.5" /></button>
                       </div>
                     ))}
                   </div>
                 </div>
-              </div>
-            )} {media.length > 0 && <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">{media.map((item) => (
-                <div key={item._id} className="relative aspect-square bg-white dark:bg-gray-800 rounded-lg overflow-hidden border border-light-border dark:border-gray-700 group">
-                  {item.type === "video" ? (
-                    <video src={item.url} className="w-full h-40 object-cover" muted loop />
-                  ) : (
-                    <img src={item.url} alt={item.name || "Media"} className="w-full h-40 object-cover" />
-                  )}
-                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={() => copyUrl(item.url)} className="p-2 bg-white/90 dark:bg-gray-900/90 rounded-full hover:bg-white hover:bg-gray-800 transition-colors" aria-label="Copy URL"><Copy className="w-4 h-4" strokeWidth={2} /></button>
-                    <button onClick={() => window.open(item.url, "_blank")} className="p-2 bg-white/90 dark:bg-gray-900/90 rounded-full hover:bg-white hover:bg-gray-800 transition-colors" aria-label="Open in new tab"><Eye className="w-4 h-4" strokeWidth={2} /></button>
-                    <button onClick={() => { const a = document.createElement("a"); a.href = item.url; a.download = item.name; a.click(); }} className="p-2 bg-white/90 dark:bg-gray-900/90 rounded-full hover:bg-white hover:bg-gray-800 transition-colors" aria-label="Download"><Download className="w-4 h-4" strokeWidth={2} /></button>
-                    <button onClick={() => deleteMedia(item._id)} className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors" aria-label="Delete"><Trash2 className="w-4 h-4" strokeWidth={2} /></button>
-                  </div>
-                  <div className="p-2">
-                    <p className="text-xs font-medium text-primary-text truncate">{item.name}</p>
-                    <p className="text-xs text-muted-text truncate">{item.type} · {item.size ? (item.size / 1024).toFixed(1) + " KB" : ""}</p>
-                  </div>
+              )}
+
+              {filteredMedia.length > 0 ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+                  {filteredMedia.map((item) => (
+                    <div key={item._id} className="relative aspect-square bg-white dark:bg-gray-800 rounded-lg overflow-hidden border border-light-border dark:border-gray-700 group">
+                      {item.type === "video" ? (
+                        <video src={item.url} className="w-full h-40 object-cover" muted loop />
+                      ) : (
+                        <img src={item.url} alt={item.name || "Media"} className="w-full h-40 object-cover" />
+                      )}
+                      <div className="absolute inset-0 bg-black/50 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onClick={() => copyUrl(item.url)} className="p-2 bg-white/90 dark:bg-gray-900/90 rounded-full hover:bg-white hover:bg-gray-800 transition-colors" aria-label="Copy URL"><Copy className="w-4 h-4" strokeWidth={2} /></button>
+                        <button onClick={() => window.open(item.url, "_blank")} className="p-2 bg-white/90 dark:bg-gray-900/90 rounded-full hover:bg-white hover:bg-gray-800 transition-colors" aria-label="Open in new tab"><Eye className="w-4 h-4" strokeWidth={2} /></button>
+                        <button onClick={() => { const a = document.createElement("a"); a.href = item.url; a.download = item.name; a.click(); }} className="p-2 bg-white/90 dark:bg-gray-900/90 rounded-full hover:bg-white hover:bg-gray-800 transition-colors" aria-label="Download"><Download className="w-4 h-4" strokeWidth={2} /></button>
+                        <button onClick={() => deleteMedia(item._id)} className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors" aria-label="Delete"><Trash2 className="w-4 h-4" strokeWidth={2} /></button>
+                      </div>
+                      <div className="p-2">
+                        <p className="text-xs font-medium text-primary-text truncate">{item.name}</p>
+                        <p className="text-xs text-muted-text truncate">{item.type} · {item.size ? (item.size / 1024).toFixed(1) + " KB" : ""}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-              </div> : (
+              ) : (
                 <div className="py-12 text-center text-muted-text">
                   <Image className="w-12 h-12 mx-auto text-muted-text/50 mb-4" strokeWidth={1.5} />
                   <p className="text-primary-text font-medium">No media files yet</p>
                   <p className="text-sm text-muted-text mt-1">Upload your first image or video</p>
                 </div>
               )}
-</div>
-          </AdminLayout>
-      )
-    );
-  }
+            </>
+          )}
+        </div>
+      </div>
+    </AdminLayout>
+  );
 }

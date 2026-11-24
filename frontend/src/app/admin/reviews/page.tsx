@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AdminLayout } from "@/components/AdminLayout";
+import AdminLayout from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { ClientOnly } from "@/components/ClientOnly";
@@ -101,7 +101,7 @@ export default function AdminReviews() {
                   <div className="h-4 bg-white dark:bg-gray-700 rounded w-full"></div>
                   <div className="h-3 bg-white dark:bg-gray-700 rounded w-1/2 mt-2"></div>
                 </div>
-              )}
+              ))}
             </div>
           ) : (
             <>
@@ -121,7 +121,7 @@ export default function AdminReviews() {
                     <div className="flex items-center gap-1 mb-2">
                       {[...Array(5)].map((_, i) => (
                         <svg key={i} className={`w-5 h-5 ${i < (review.rating || 0) ? "text-amber-500 fill-current" : "text-muted-text"}`} fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 1.292a1 1 0 00-.364 1.118l-2.8 2.034a1 1 0 00-1.175 0l-2.8-2.034a1 1 0 00-.364 1.118l1.07 1.292a1 1 0 00-.364 1.118l-2.8 2.034a1 1 0 00-1.175 0l-2.8-2.034a1 1 0 00-.364 1.118l1.07 1.292a1 1 0 00-.364 1.118l-2.8 2.034a1 1 0 00-1.175 0l-2.8-2.034a1 1 0 00-.364 1.118l1.07 1.292a1 1 0 00-.364 1.118l-2.8 2.034a1 1 0 00-1.175 0z" /></svg>
-)}
+                      ))}
                     </div>
                     <p className="text-sm text-muted-text mb-3">{review.comment || review.text}</p>
                     <div className="flex items-center gap-2 text-xs text-muted-text">
@@ -148,8 +148,7 @@ export default function AdminReviews() {
             </>
           )}
         </div>
-</AdminLayout>
-      
-    )
-  };
+      </div>
+    </AdminLayout>
+  );
 }

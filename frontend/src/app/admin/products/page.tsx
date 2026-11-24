@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AdminLayout } from "@/components/AdminLayout";
+import AdminLayout from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -422,7 +422,7 @@ export default function AdminProducts() {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-primary-text mb-1.5">Price (₦) *</label>
-                        <input type="number" min="0" step="0.01" required placeholder="0.00" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm text-primary-text focus:outline-none focus:ring-2 focus:ring-soft-gold" required />
+                        <input type="number" min="0" step="0.01" required placeholder="0.00" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm text-primary-text focus:outline-none focus:ring-2 focus:ring-soft-gold" />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-primary-text mb-1.5">Original Price (₦)</label>
@@ -431,7 +431,7 @@ export default function AdminProducts() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-primary-text mb-1.5">Stock Quantity *</label>
-                      <input type="number" min="0" required placeholder="0" value={form.stockQuantity} onChange={(e) => setForm({ ...form, stockQuantity: Number(e.target.value) })} className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm text-primary-text focus:outline-none focus:ring-2 focus:ring-soft-gold" required />
+                      <input type="number" min="0" required placeholder="0" value={form.stockQuantity} onChange={(e) => setForm({ ...form, stockQuantity: Number(e.target.value) })} className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm text-primary-text focus:outline-none focus:ring-2 focus:ring-soft-gold" />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-primary-text mb-1.5">Status</label>
@@ -499,7 +499,7 @@ export default function AdminProducts() {
             </div>
           </div>
         )}
+      </div>
       </AdminLayout>
-    )
-  };
+  );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AdminLayout } from "@/components/AdminLayout";
+import AdminLayout from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { ClientOnly } from "@/components/ClientOnly";
@@ -46,7 +46,7 @@ export default function AdminCEO() {
       youtube: "",
       linkedin: "",
     },
-    announcements: [{ title: "", content: "", date: new Date().toISOString().split("T")[0] }],
+    announcements: [{ title: "", content: "", date: "" }],
   });
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [profileImagePreview, setProfileImagePreview] = useState<string | null>(null);
@@ -54,6 +54,16 @@ export default function AdminCEO() {
   useEffect(() => {
     if (user?.role === "admin") loadCEO();
   }, [user]);
+
+  useEffect(() => {
+    setForm((prev) => ({
+      ...prev,
+      announcements: prev.announcements.map((announcement) => ({
+        ...announcement,
+        date: announcement.date || new Date().toISOString().split("T")[0],
+      })),
+    }));
+  }, []);
 
   const loadCEO = async () => {
     setLoading(true);
@@ -119,7 +129,7 @@ export default function AdminCEO() {
         if (key === "socialLinks" || key === "announcements") {
           formData.append(key, JSON.stringify(value));
         } else {
-          formData.append(key, value);
+          formData.append(key, typeof value === "string" ? value : JSON.stringify(value));
         }
       });
       if (profileImageFile) {
@@ -219,7 +229,6 @@ export default function AdminCEO() {
                               onChange={handleImageUpload}
                               className="hidden"
                               id="profile-image-input"
-                              ref={(el) => el && editMode && el.click()}
                             />
                             <label htmlFor="profile-image-input" className="cursor-pointer bg-muted hover:bg-muted/80 px-4 py-2 rounded-lg text-sm font-medium text-primary-text transition-colors">
                               {profileImageFile ? "Change Image" : "Upload Image"}
@@ -228,7 +237,6 @@ export default function AdminCEO() {
                         </div>
                       </div>
                     </div>
-                  </div>
                 ) : (
                   <div className="flex items-start gap-6">
                     <div className="relative w-28 h-28 rounded-full overflow-hidden bg-muted flex items-center justify-center flex-shrink-0">
@@ -265,7 +273,7 @@ export default function AdminCEO() {
                       </div>
                     </div>
                   </div>
-                )}
+                    )}
               </div>
 
               <div className="bg-white dark:bg-gray-800 rounded-xl border border-light-border dark:border-gray-700 p-6">
@@ -355,7 +363,7 @@ export default function AdminCEO() {
                       <p className="text-muted-text text-center py-8">No announcements yet</p>
                     )}
                   </div>
-                )}
+                    )}
               </div>
             </div>
 
@@ -420,7 +428,6 @@ export default function AdminCEO() {
                           value={form.socialLinks[social.key as keyof typeof form.socialLinks] || ""}
                           onChange={(e) => setForm({ ...form, socialLinks: { ...form.socialLinks, [social.key]: e.target.value } })}
                           className="flex-1 px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm text-primary-text focus:outline-none focus:ring-2 focus:ring-soft-gold"
-                          placeholder={`https://${social.key}.com/...`}
                         />
                       </div>
                     ))}
@@ -495,6 +502,7 @@ export default function AdminCEO() {
                 )}
               </div>
             </div>
+          </div>
 
             {editMode && (
               <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-light-border dark:border-gray-700 p-4 shadow-lg">
@@ -515,8 +523,10 @@ export default function AdminCEO() {
                   </button>
                 </div>
               </div>
-)}
-      </AdminLayout>
-    )
-  };
+            )}
+          </>
+        )}
+      </div>
+    </AdminLayout>
+  );
 }

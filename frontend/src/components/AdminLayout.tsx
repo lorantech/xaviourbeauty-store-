@@ -14,6 +14,7 @@ import {
   MessageSquare,
   BarChart2,
   FileText,
+  Image,
   Tag as TagIcon,
   Bell,
   Settings,
@@ -34,6 +35,7 @@ const navigation = [
   { name: "Overview", href: "/admin", icon: LayoutDashboard },
   {
     name: "Store Management",
+    icon: Package,
     children: [
       { name: "Products", href: "/admin/products", icon: Package },
       { name: "Categories", href: "/admin/categories", icon: Tag },
@@ -45,6 +47,7 @@ const navigation = [
   },
   {
     name: "Brand Management",
+    icon: Image,
     children: [
       { name: "CEO Corner", href: "/admin/ceo", icon: MessageSquare },
       { name: "Homepage Content", href: "/admin/homepage", icon: LayoutDashboard },
@@ -54,6 +57,7 @@ const navigation = [
   },
   {
     name: "Business Management",
+    icon: BarChart2,
     children: [
       { name: "Sales Analytics", href: "/admin/analytics", icon: BarChart2 },
       { name: "Reports", href: "/admin/reports", icon: FileText },
@@ -62,6 +66,7 @@ const navigation = [
   },
   {
     name: "System",
+    icon: Settings,
     children: [
       { name: "Notifications", href: "/admin/notifications", icon: Bell },
       { name: "Store Settings", href: "/admin/settings", icon: Settings },
@@ -372,8 +377,4 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       )}
     </div>
   );
-}
-
-function handleLogout() {
-  // This will be replaced by the actual logout function from context
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AdminLayout } from "@/components/AdminLayout";
+import AdminLayout from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -18,6 +18,7 @@ import {
   ArrowUp,
   ArrowDown,
   Star,
+  Tag,
   Target,
   Info,
   ChevronRight,
@@ -168,8 +169,8 @@ export default function AdminHomepage() {
               <p className="text-muted-text text-sm text-center px-4">Featured Products</p>
             </div>
           </div>
-</div>
-      </AdminLayout>
-    )
-  };
+      </div>
+      </div>
+    </AdminLayout>
+  );
 }

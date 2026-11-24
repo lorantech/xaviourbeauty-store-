@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AdminLayout } from "@/components/AdminLayout";
+import AdminLayout from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { ClientOnly } from "@/components/ClientOnly";
@@ -271,9 +271,8 @@ export default function AdminCustomers() {
               </div>
             </div>
           </div>
-)}
-        </AdminLayout>
-      )
-    };
-  }
+        )}
+      </div>
+    </AdminLayout>
+  );
 }

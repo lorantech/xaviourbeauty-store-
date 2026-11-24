@@ -1,25 +1,28 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AdminLayout } from "@/components/AdminLayout";
+import AdminLayout from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
-import { ClientOnly } from "@/components/ClientOnly";
 import {
   Plus,
   Edit,
   Trash2,
   Loader2,
-  ChevronDown,
   Save,
   X,
-  Calendar,
   Tag,
-  Search,
-  Eye,
-  AlertTriangle,
-  CheckCircle,
+  Percent,
+  Truck,
+  Gift,
 } from "lucide-react";
+
+const discountTypes = [
+  { value: "percentage", label: "Percentage" },
+  { value: "fixed", label: "Fixed Amount" },
+  { value: "free_shipping", label: "Free Shipping" },
+  { value: "buy_x_get_y", label: "Buy X Get Y" },
+];
 
 export default function AdminPromotions() {
   const { user } = useAuth();
@@ -155,9 +158,9 @@ export default function AdminPromotions() {
       applicableProducts: [],
       applicableCategories: [],
     });
-  }
+  };
 
-if (user?.role !== "admin") return null;
+  if (user?.role !== "admin") return null;
 
   return (
     <AdminLayout>
@@ -340,8 +343,8 @@ if (user?.role !== "admin") return null;
               </form>
             </div>
           </div>
-)}
-      </AdminLayout>
-    )
-  };
+        )}
+      </div>
+    </AdminLayout>
+  );
 }

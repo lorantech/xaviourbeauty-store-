@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line, Area } from "recharts";
+import { AreaChart, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area } from "recharts";
+import type { TooltipValueType } from "recharts";
 import Link from "next/link";
-import { AdminLayout } from "@/components/AdminLayout";
+import AdminLayout from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { ClientOnly } from "@/components/ClientOnly";
@@ -25,6 +26,11 @@ const statCards = [
   { name: "Total Customers", key: "customers", icon: Users, color: "bg-orange-500", format: "number" },
   { name: "Pending Orders", key: "pendingOrders", icon: AlertTriangle, color: "bg-amber-500", format: "number" },
   { name: "Low Stock Items", key: "lowStock", icon: AlertTriangle, color: "bg-red-500", format: "number" },
+];
+
+const formatRevenueTooltip = (value: TooltipValueType | undefined): [string, string] => [
+  value === undefined ? "N/A" : `\u20a6${new Intl.NumberFormat().format(Number(value))}`,
+  "Revenue",
 ];
 
 export default function AdminDashboard() {
@@ -166,10 +172,10 @@ export default function AdminDashboard() {
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" stroke="#E8E5DC" vertical={false} />
                         <XAxis dataKey="name" stroke="#858B84" fontSize={12} tickLine={false} axisLine={false} />
-                        <YAxis stroke="#858B84" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `₦${(value / 1000).toFixed(0)}k`} />
+                        <YAxis stroke="#858B84" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value: number) => `₦${(value / 1000).toFixed(0)}k`} />
                         <Tooltip
                           contentStyle={{ backgroundColor: "#fff", border: "1px solid #E8E5DC", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}
-                          formatter={(value: number) => [`₦${new Intl.NumberFormat().format(value)}`, "Revenue"]}
+                          formatter={formatRevenueTooltip}
                         />
                         <Area
                           type="monotone"
@@ -303,8 +309,8 @@ export default function AdminDashboard() {
               </div>
             </div>
           </>
-)}
-      </AdminLayout>
-    )
-  };
+        )}
+    </div>
+    </AdminLayout>
+  );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AdminLayout } from "@/components/AdminLayout";
+import AdminLayout from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -280,9 +280,9 @@ export default function AdminOrders() {
                 </div>
               )}
             </>
-)}
-        </AdminLayout>
-      )
-    };
-  }
+          )}
+        </div>
+      </div>
+    </AdminLayout>
+  );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AdminLayout } from "@/components/AdminLayout";
+import AdminLayout from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { ClientOnly } from "@/components/ClientOnly";
@@ -25,6 +25,8 @@ import {
   Lock,
   User,
   Settings as SettingsIcon,
+  Sun,
+  Moon,
 } from "lucide-react";
 
 const tabConfig = [
@@ -107,7 +109,7 @@ export default function AdminSettings() {
   };
 
   const updateSetting = (section: string, key: string, value: any) => {
-    setSettings((prev) => ({
+    setSettings((prev: Record<string, any>) => ({
       ...prev,
       [section]: { ...prev[section], [key]: value },
     }));
@@ -522,8 +524,8 @@ export default function AdminSettings() {
             )}
           </div>
         </div>
-</AdminLayout>
-      
-    )
-  };
+        </div>
+      </ClientOnly>
+    </AdminLayout>
+  );
 }

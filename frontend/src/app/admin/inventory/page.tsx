@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AdminLayout } from "@/components/AdminLayout";
+import AdminLayout from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { ClientOnly } from "@/components/ClientOnly";
@@ -81,10 +81,6 @@ export default function AdminInventory() {
       if (sortOrder === "asc") return aVal > bVal ? 1 : -1;
       return aVal < bVal ? 1 : -1;
     });
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN", minimumFractionDigits: 0 }).format(amount);
-  };
 
   if (user?.role !== "admin") return null;
 
@@ -288,7 +284,8 @@ export default function AdminInventory() {
                               />
                             </td>
                           </tr>
-)}
+                        );
+                      })}
                         {products.length === 0 && (
                           <tr>
                             <td colSpan={6} className="py-12 text-center text-muted-text">
@@ -310,6 +307,5 @@ export default function AdminInventory() {
           </div>
 
       </AdminLayout>
-    )
-  };
+  );
 }

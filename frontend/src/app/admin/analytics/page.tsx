@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area } from "recharts";
-import { AdminLayout } from "@/components/AdminLayout";
+import type { PieLabelRenderProps, TooltipValueType } from "recharts";
+import AdminLayout from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -17,9 +18,15 @@ import {
   Download,
   BarChart2,
   PieChart as PieChartIcon,
+  AreaChart as AreaChartIcon,
+  LineChart as LineChartIcon,
 } from "lucide-react";
 
 const COLORS = ["#172C25", "#223B31", "#C6A66B", "#3B82F6", "#8B5CF6", "#EC4899", "#F59E0B", "#10B981"];
+const formatRevenueTooltip = (value: TooltipValueType | undefined): [string, string] => [
+  value === undefined ? "N/A" : `\u20a6${new Intl.NumberFormat().format(Number(value))}`,
+  "Revenue",
+];
 
 export default function AdminAnalytics() {
   const { user } = useAuth();
@@ -65,8 +72,8 @@ export default function AdminAnalytics() {
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#E8E5DC" vertical={false} />
             <XAxis dataKey="name" stroke="#858B84" fontSize={12} tickLine={false} axisLine={false} />
-            <YAxis stroke="#858B84" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(v) => `₦${(v/1000).toFixed(0)}k`} />
-            <Tooltip contentStyle={{ backgroundColor: "#fff", border: "1px solid #E8E5DC", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }} formatter={(v: number) => [`₦${new Intl.NumberFormat().format(v)}`, "Revenue"]} />
+            <YAxis stroke="#858B84" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(v: number) => `₦${(v/1000).toFixed(0)}k`} />
+            <Tooltip contentStyle={{ backgroundColor: "#fff", border: "1px solid #E8E5DC", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }} formatter={formatRevenueTooltip} />
             <Area type="monotone" dataKey="revenue" stroke="#172C25" strokeWidth={2} fillOpacity={1} fill="url(#colorRevenue)" />
           </AreaChart>
         </ResponsiveContainer>
@@ -79,8 +86,8 @@ export default function AdminAnalytics() {
           <LineChart data={data.chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#E8E5DC" vertical={false} />
             <XAxis dataKey="name" stroke="#858B84" fontSize={12} tickLine={false} axisLine={false} />
-            <YAxis stroke="#858B84" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(v) => `₦${(v/1000).toFixed(0)}k`} />
-            <Tooltip contentStyle={{ backgroundColor: "#fff", border: "1px solid #E8E5DC", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }} formatter={(v: number) => [`₦${new Intl.NumberFormat().format(v)}`, "Revenue"]} />
+            <YAxis stroke="#858B84" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(v: number) => `₦${(v/1000).toFixed(0)}k`} />
+            <Tooltip contentStyle={{ backgroundColor: "#fff", border: "1px solid #E8E5DC", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }} formatter={formatRevenueTooltip} />
             <Line type="monotone" dataKey="revenue" stroke="#172C25" strokeWidth={2} dot={false} activeDot={{ r: 6 }} />
           </LineChart>
         </ResponsiveContainer>
@@ -92,16 +99,12 @@ export default function AdminAnalytics() {
         <BarChart data={data.chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#E8E5DC" vertical={false} />
           <XAxis dataKey="name" stroke="#858B84" fontSize={12} tickLine={false} axisLine={false} />
-          <YAxis stroke="#858B84" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(v) => `₦${(v/1000).toFixed(0)}k`} />
-          <Tooltip contentStyle={{ backgroundColor: "#fff", border: "1px solid #E8E5DC", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }} formatter={(v: number) => [`₦${new Intl.NumberFormat().format(v)}`, "Revenue"]} />
+          <YAxis stroke="#858B84" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(v: number) => `₦${(v/1000).toFixed(0)}k`} />
+          <Tooltip contentStyle={{ backgroundColor: "#fff", border: "1px solid #E8E5DC", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }} formatter={formatRevenueTooltip} />
           <Bar dataKey="revenue" fill="#172C25" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     );
-  };
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN", minimumFractionDigits: 0 }).format(value);
   };
 
   if (user?.role !== "admin") return null;
@@ -123,7 +126,7 @@ export default function AdminAnalytics() {
             <div className="flex gap-1 bg-muted rounded-lg p-1">
               {(["area", "line", "bar"] as const).map((type) => (
                 <button key={type} onClick={() => setChartType(type)} className={`p-2 rounded transition-all ${chartType === type ? "bg-white dark:bg-gray-700 text-primary-forest-green shadow-sm" : "text-muted-text hover:text-primary-text"}`} aria-label={type}>
-                  {type === "area" ? <AreaChartIcon className="w-4 h-4" strokeWidth={2} /> : type === "line" ? <LineChart2 className="w-4 h-4" strokeWidth={2} /> : <BarChart2 className="w-4 h-4" strokeWidth={2} />}
+                  {type === "area" ? <AreaChartIcon className="w-4 h-4" strokeWidth={2} /> : type === "line" ? <LineChartIcon className="w-4 h-4" strokeWidth={2} /> : <BarChart2 className="w-4 h-4" strokeWidth={2} />}
                 </button>
               ))}
             </div>
@@ -166,10 +169,10 @@ export default function AdminAnalytics() {
                   {data?.categoryData?.length > 0 ? (
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
-                        <Pie data={data.categoryData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={2} dataKey="revenue" nameKey="name" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false}>
+                        <Pie data={data.categoryData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={2} dataKey="revenue" nameKey="name" label={({ name, percent }: PieLabelRenderProps) => percent === undefined ? name : `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false}>
                           {data.categoryData.map((_: any, i: number) => <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />)}
                         </Pie>
-                        <Tooltip formatter={(v: number) => [`₦${new Intl.NumberFormat().format(v)}`, "Revenue"]} contentStyle={{ backgroundColor: "#fff", border: "1px solid #E8E5DC", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }} />
+                        <Tooltip formatter={formatRevenueTooltip} contentStyle={{ backgroundColor: "#fff", border: "1px solid #E8E5DC", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }} />
                       </PieChart>
                     </ResponsiveContainer>
                   ) : (
@@ -211,9 +214,9 @@ export default function AdminAnalytics() {
                 </div>
               </div>
             </div>
-</>
-        </AdminLayout>
-      )
-    };
-  }
+          </>
+        )}
+      </div>
+    </AdminLayout>
+  );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AdminLayout } from "@/components/AdminLayout";
+import AdminLayout from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { ClientOnly } from "@/components/ClientOnly";
@@ -21,6 +21,10 @@ import {
   AlertCircle,
   CheckCircle,
   Shield,
+  Bell,
+  Sun,
+  Moon,
+  Globe,
 } from "lucide-react";
 
 export default function AdminProfile() {
@@ -55,8 +59,6 @@ export default function AdminProfile() {
     new: false,
     confirm: false,
   });
-
-  const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -162,7 +164,17 @@ export default function AdminProfile() {
             </div>
 
             <div className="p-6">
-              {message && <div className={`mb-6 px-4 py-3 rounded-lg ${message.type === "success" ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" : "bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-400"} flex items-center justify-between animate-in slide-in-from-top-2"><span>{message.text}</span><button onClick={() => setMessage(null)} className="text-muted-text hover:text-primary-text"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg></button></div>}
+              {message && (
+                <div className={`mb-6 px-4 py-3 rounded-lg ${message.type === "success" ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" : "bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-400"} flex items-center justify-between animate-in slide-in-from-top-2`}>
+                  <span>{message.text}</span>
+                  <button onClick={() => setMessage(null)} className="text-muted-text hover:text-primary-text">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                      <line x1="18" y1="6" x2="6" y2="18" />
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                  </button>
+                </div>
+              )}
 
               {activeTab === "profile" && (
                 <form onSubmit={handleProfileSave} className="max-w-2xl space-y-6">
@@ -323,10 +335,9 @@ export default function AdminProfile() {
                 </div>
               )}
 
-}
           </div>
-        </AdminLayout>
-      )
-    };
-  }
+        </div>
+        </div>
+      </AdminLayout>
+  );
 }

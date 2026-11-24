@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AdminLayout } from "@/components/AdminLayout";
+import AdminLayout from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { ClientOnly } from "@/components/ClientOnly";
@@ -128,11 +128,6 @@ export default function AdminTestimonials() {
     setForm({ customerName: "", customerRole: "", company: "", content: "", rating: 5, image: "", videoUrl: "", featured: false, approved: true });
     setImageFile(null);
     setImagePreview(null);
-  };
-
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) { setImageFile(file); setImagePreview(URL.createObjectURL(file)); }
   };
 
   if (user?.role !== "admin") return null;
@@ -276,8 +271,7 @@ export default function AdminTestimonials() {
             </div>
           </div>
         )}
-</AdminLayout>
-      
-    )
-  };
+      </div>
+    </AdminLayout>
+  );
 }
