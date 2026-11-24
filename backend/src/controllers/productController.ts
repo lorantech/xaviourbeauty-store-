@@ -8,9 +8,12 @@ import { asyncHandler } from "../middleware/errorHandler";
 const slugify = (s: string) => s.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
 export const listProducts = async (req: Request, res: Response) => {
-  const { q, category, minPrice, maxPrice, inStock, sort, page = "1", limit = "20", featured, bestSeller, newArrival, status } = req.query as any;
-  const filter: any = {};
-  if (status) filter.status = status; else filter.status = "published";
+  const { q, category, minPrice, maxPrice, inStock, sort, page = "1", limit = "20", featured, bestSeller, newArrival, status, includeAll } = req.query as any;
+  const filter: any = { isDeleted: { $ne: true } };
+  if (status) filter.status = status;
+  else if (includeAll === "true" && (req as any).user?.role === "admin") {
+    // Admin product management needs draft/published/archived visibility.
+  } else filter.status = "published";
   if (q) filter.$or = [{ name: new RegExp(q, "i") }, { description: new RegExp(q, "i") }];
   if (category) {
     const cat = await Category.findOne({ slug: category });
@@ -40,7 +43,7 @@ export const listProducts = async (req: Request, res: Response) => {
 
 export const getProduct = async (req: Request, res: Response) => {
   const { slug } = req.params;
-  const product = await Product.findOne({ slug }).populate("category", "name slug");
+  const product = await Product.findOne({ slug, isDeleted: { $ne: true } }).populate("category", "name slug");
   if (!product) throw new AppError("Product not found", 404);
   res.json({ product });
 };
@@ -54,7 +57,7 @@ export const createProduct = async (req: any, res: Response) => {
 
 export const updateProduct = async (req: any, res: Response) => {
   const product = await Product.findById(req.params.id);
-  if (!product) throw new AppError("Product not found", 404);
+  if (!product || (product as any).isDeleted) throw new AppError("Product not found", 404);
   const before = product.toObject();
   if (req.body.price !== undefined && Number(req.body.price) !== product.price) {
     await AdminAuditLog.create({
@@ -71,8 +74,23 @@ export const updateProduct = async (req: any, res: Response) => {
   res.json({ product });
 };
 
-export const deleteProduct = async (req: Request, res: Response) => {
-  const product = await Product.findByIdAndDelete(req.params.id);
-  if (!product) throw new AppError("Product not found", 404);
-  res.json({ message: "Deleted" });
+export const deleteProduct = async (req: any, res: Response) => {
+  const product = await Product.findById(req.params.id);
+  if (!product || (product as any).isDeleted) throw new AppError("Product not found", 404);
+  (product as any).isDeleted = true;
+  (product as any).deletedAt = new Date();
+  (product as any).status = "archived";
+  (product as any).featured = false;
+  (product as any).bestSeller = false;
+  (product as any).newArrival = false;
+  await product.save();
+  await AdminAuditLog.create({
+    admin: req.user?._id,
+    action: "product_delete",
+    entityType: "Product",
+    entityId: product._id.toString(),
+    before: { name: (product as any).name, slug: (product as any).slug },
+    after: { isDeleted: true },
+  });
+  res.json({ message: "Product deleted" });
 };

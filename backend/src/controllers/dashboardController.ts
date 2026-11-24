@@ -16,7 +16,7 @@ export const dashboard = async (req: Request, res: Response) => {
     Order.countDocuments({ paymentStatus: "paid" }),
     Product.countDocuments({ stockQuantity: { $lt: 5 } }),
     Order.find().populate("customer", "name").sort({ createdAt: -1 }).limit(10),
-    Product.find({ bestSeller: true }).limit(5),
+    Product.find({ bestSeller: true, status: "published", isDeleted: { $ne: true } }).limit(5),
   ]);
   const revenueAgg = await Order.aggregate([{ $match: { paymentStatus: "paid" } }, { $group: { _id: null, total: { $sum: "$total" } } }]);
   const revenue = revenueAgg[0]?.total || 0;

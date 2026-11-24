@@ -22,6 +22,8 @@ export interface IProduct extends Document {
   includedAccessories?: string[];
   rating: number;
   reviewCount: number;
+  isDeleted: boolean;
+  deletedAt?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -49,6 +51,8 @@ const productSchema = new Schema<IProduct>(
     includedAccessories: [String],
     rating: { type: Number, default: 0 },
     reviewCount: { type: Number, default: 0 },
+    isDeleted: { type: Boolean, default: false, index: true },
+    deletedAt: { type: Date },
   },
   { timestamps: true }
 );

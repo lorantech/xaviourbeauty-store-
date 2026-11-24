@@ -29,7 +29,7 @@ export const createOrder = async (req: any, res: Response) => {
   const orderItems: any[] = [];
   for (const item of cart.items as any[]) {
     const product = await Product.findById(item.product._id || item.product);
-    if (!product || product.status !== "published") throw new AppError("Product unavailable", 400);
+    if (!product || product.status !== "published" || (product as any).isDeleted) throw new AppError("Product unavailable", 400);
     if (product.stockQuantity < item.quantity) throw new AppError(`Insufficient stock for ${product.name}`, 400);
     const unitPrice = product.price;
     orderItems.push({

@@ -13,7 +13,7 @@ export const listReviews = async (req: Request, res: Response) => {
 export const createReview = async (req: any, res: Response) => {
   const { rating, title, text, image } = req.body;
   const product = await Product.findById(req.params.id);
-  if (!product) throw new AppError("Product not found", 404);
+  if (!product || (product as any).isDeleted) throw new AppError("Product not found", 404);
   const existing = await Review.findOne({ product: req.params.id, user: req.user._id });
   if (existing) throw new AppError("You already reviewed this product", 409);
   const review = await Review.create({ product: req.params.id, user: req.user._id, rating, title, text, image, status: "pending" });

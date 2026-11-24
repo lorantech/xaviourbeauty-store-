@@ -17,7 +17,7 @@ export const getCart = async (req: any, res: Response) => {
 export const addItem = async (req: any, res: Response) => {
   const { productId, quantity = 1 } = req.body;
   const product = await Product.findById(productId);
-  if (!product || product.status !== "published") throw new AppError("Product not available", 404);
+  if (!product || product.status !== "published" || (product as any).isDeleted) throw new AppError("Product not available", 404);
   if (product.stockQuantity < quantity) throw new AppError("Insufficient stock", 400);
   const filter = req.user ? { user: req.user._id } : { sessionId: getSessionId(req) };
   let cart = await Cart.findOne(filter);
@@ -45,9 +45,10 @@ export const updateItem = async (req: any, res: Response) => {
     item.deleteOne();
   } else {
     const product = await Product.findById(item.product);
-    if (product && product.stockQuantity < quantity) throw new AppError("Insufficient stock", 400);
+    if (!product || (product as any).isDeleted) throw new AppError("Product not available", 404);
+    if (product.stockQuantity < quantity) throw new AppError("Insufficient stock", 400);
     item.quantity = quantity;
-    if (product) item.priceSnapshot = product.price;
+    item.priceSnapshot = product.price;
   }
   await cart.save();
   await cart.populate("items.product");

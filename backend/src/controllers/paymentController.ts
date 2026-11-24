@@ -78,7 +78,7 @@ export const verifyPayment = async (req: Request, res: Response) => {
       const { Product } = await import("../models/Product.js");
       for (const item of order.items) {
         const updated = await Product.findOneAndUpdate(
-          { _id: item.product, stockQuantity: { $gte: item.quantity } },
+          { _id: item.product, stockQuantity: { $gte: item.quantity }, isDeleted: { $ne: true } },
           { $inc: { stockQuantity: -item.quantity } },
           { new: true }
         );
@@ -161,7 +161,7 @@ export const approveBankTransfer = async (req: any, res: Response) => {
   const { Product } = await import("../models/Product.js");
   for (const item of order.items) {
     const updated = await Product.findOneAndUpdate(
-      { _id: item.product, stockQuantity: { $gte: item.quantity } },
+      { _id: item.product, stockQuantity: { $gte: item.quantity }, isDeleted: { $ne: true } },
       { $inc: { stockQuantity: -item.quantity } },
       { new: true }
     );

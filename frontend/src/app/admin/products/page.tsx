@@ -59,12 +59,14 @@ export default function AdminProducts() {
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   const load = async () => {
     setLoading(true);
     try {
       const [productsRes, categoriesRes] = await Promise.all([
-        api.get("/products", { params: { limit: 100, status: statusFilter || undefined, category: categoryFilter || undefined } }),
+        api.get("/products", { params: { limit: 100, status: statusFilter || undefined, category: categoryFilter || undefined, includeAll: "true" } }),
         api.get("/categories"),
       ]);
       let productsData = productsRes.data.items || [];
@@ -187,17 +189,30 @@ export default function AdminProducts() {
     setShowForm(true);
   };
 
-  const deleteProduct = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this product? This action cannot be undone.")) return;
+  const confirmDeleteProduct = async () => {
+    if (!deleteConfirmId) return;
+    const id = deleteConfirmId;
     setDeletingId(id);
+    setMessage(null);
     try {
       await api.delete(`/products/${id}`);
-      load();
+      setProducts((prev) => prev.filter((p) => p._id !== id));
+      if (editingProduct?._id === id) {
+        setShowForm(false);
+        setEditingProduct(null);
+        resetForm();
+      }
+      setDeleteConfirmId(null);
+      setMessage({ type: "success", text: "Product deleted successfully." });
     } catch (error: any) {
-      alert(error.response?.data?.message || "Failed to delete product");
+      setMessage({ type: "error", text: error.response?.data?.message || "Failed to delete product" });
     } finally {
       setDeletingId(null);
     }
+  };
+
+  const deleteProduct = (id: string) => {
+    setDeleteConfirmId(id);
   };
 
   const resetForm = () => {
@@ -243,6 +258,11 @@ export default function AdminProducts() {
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-xl border border-light-border dark:border-gray-700 p-4">
+          {message && (
+            <div className={`mb-4 px-4 py-3 rounded-lg text-sm ${message.type === "success" ? "bg-emerald-50 text-emerald-700 border border-emerald-200" : "bg-red-50 text-red-700 border border-red-200"}`}>
+              {message.text}
+            </div>
+          )}
           <div className="flex flex-col sm:flex-row gap-4 mb-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-text" strokeWidth={2} />
@@ -391,6 +411,22 @@ export default function AdminProducts() {
           )}
         </div>
 
+        {deleteConfirmId && (
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 animate-in fade-in">
+            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-xl max-w-md w-full p-6 border border-light-border dark:border-gray-700">
+              <h3 className="text-lg font-semibold text-primary-text">Delete Product</h3>
+              <p className="text-sm text-muted-text mt-2">Are you sure you want to delete this product? This action cannot be undone.</p>
+              <div className="flex items-center justify-end gap-3 mt-6">
+                <button type="button" onClick={() => setDeleteConfirmId(null)} disabled={!!deletingId} className="px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm font-medium text-primary-text hover:bg-muted transition-colors disabled:opacity-50">Cancel</button>
+                <button type="button" onClick={confirmDeleteProduct} disabled={!!deletingId} className="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50">
+                  {deletingId ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                  {deletingId ? "Deleting..." : "Confirm Delete"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Product Form Modal */}
         {showForm && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 animate-in fade-in">
@@ -485,14 +521,24 @@ export default function AdminProducts() {
                 </div>
 
                 <div className="border-t border-light-border dark:border-gray-700 pt-6">
-                  <div className="flex items-center justify-end gap-3">
-                    <button type="button" onClick={() => { setShowForm(false); setEditingProduct(null); resetForm(); }} className="px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm font-medium text-primary-text hover:bg-muted transition-colors">
-                      Cancel
-                    </button>
-                    <button type="submit" className="px-4 py-2.5 bg-primary-forest-green hover:bg-secondary-forest-green text-white font-medium rounded-lg transition-colors flex items-center gap-2">
-                      <Save className="w-4 h-4" />
-                      {editingProduct ? "Update Product" : "Create Product"}
-                    </button>
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      {editingProduct && (
+                        <button type="button" onClick={() => deleteProduct(editingProduct._id)} disabled={deletingId === editingProduct._id} className="px-4 py-2.5 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 disabled:opacity-50">
+                          <Trash2 className="w-4 h-4" />
+                          Delete Product
+                        </button>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button type="button" onClick={() => { setShowForm(false); setEditingProduct(null); resetForm(); }} className="px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm font-medium text-primary-text hover:bg-muted transition-colors">
+                        Cancel
+                      </button>
+                      <button type="submit" className="px-4 py-2.5 bg-primary-forest-green hover:bg-secondary-forest-green text-white font-medium rounded-lg transition-colors flex items-center gap-2">
+                        <Save className="w-4 h-4" />
+                        {editingProduct ? "Update Product" : "Create Product"}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </form>
