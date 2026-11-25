@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import AdminLayout from "@/components/AdminLayout";
 import { api } from "@/lib/api";
@@ -30,7 +30,7 @@ const statusColors = {
   archived: "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300",
 };
 
-export default function AdminProducts() {
+function AdminProductsContent() {
   const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -565,5 +565,13 @@ export default function AdminProducts() {
         )}
       </div>
       </AdminLayout>
+  );
+}
+
+export default function AdminProducts() {
+  return (
+    <Suspense fallback={<AdminLayout><div className="p-6 text-sm text-muted-text">Loading products...</div></AdminLayout>}>
+      <AdminProductsContent />
+    </Suspense>
   );
 }
