@@ -70,7 +70,7 @@ function AdminProductsContent() {
     try {
       const [productsRes, categoriesRes] = await Promise.all([
         api.get("/products", { params: { limit: 100, status: statusFilter || undefined, category: categoryFilter || undefined, includeAll: "true" } }),
-        api.get("/categories/all"),
+        api.get("/categories/all").catch(() => api.get("/categories")),
       ]);
       let productsData = productsRes.data.items || [];
       if (search) {
@@ -90,7 +90,9 @@ function AdminProductsContent() {
 
   useEffect(() => {
     if (user?.role !== "admin") return;
-    api.get("/categories/all").then((r) => setCategories(r.data.categories || [])).catch(() => {});
+    api.get("/categories/all")
+      .then((r) => setCategories(r.data.categories || []))
+      .catch(() => api.get("/categories").then((r) => setCategories(r.data.categories || [])).catch(() => {}));
   }, [user]);
 
   useEffect(() => {
