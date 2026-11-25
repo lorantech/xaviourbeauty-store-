@@ -1,4 +1,4 @@
-﻿import { Schema, model, Document, Types } from "mongoose";
+import { Schema, model, Document, Types } from "mongoose";
 
 export interface ICoupon extends Document {
   code: string;
@@ -45,6 +45,13 @@ export interface IStoreSettings extends Document {
   deliveryOptions: { name: string; fee: number }[];
   policies: { shipping?: string; returns?: string; privacy?: string; terms?: string };
   announcementBar?: { text: string; link?: string; isActive: boolean };
+  bankDetails?: {
+    bankName: string;
+    accountName: string;
+    accountNumber: string;
+    instructions?: string;
+    whatsappNumber?: string;
+  };
   createdAt: Date;
   updatedAt: Date;
 }
@@ -67,6 +74,13 @@ const storeSettingsSchema = new Schema<IStoreSettings>(
       terms: String,
     },
     announcementBar: { text: String, link: String, isActive: { type: Boolean, default: false } },
+    bankDetails: {
+      bankName: { type: String, default: "UBA" },
+      accountName: { type: String, default: "Xaviour Beauty Store Ventures" },
+      accountNumber: { type: String, default: "1027152497" },
+      instructions: { type: String, default: "Transfer the exact total amount and upload your payment receipt below for verification." },
+      whatsappNumber: { type: String, default: "2348039630776" },
+    },
   },
   { timestamps: true }
 );

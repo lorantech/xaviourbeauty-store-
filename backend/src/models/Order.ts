@@ -11,14 +11,21 @@ export interface IOrderItem {
 
 export interface IOrder extends Document {
   orderNumber: string;
-  customer: Types.ObjectId;
+  customer?: Types.ObjectId;
+  isGuest: boolean;
+  guestCustomer?: {
+    name: string;
+    email: string;
+    phone: string;
+  };
+  orderAccessToken?: string;
   items: IOrderItem[];
   subtotal: number;
   discount: number;
   shipping: number;
   total: number;
   currency: string;
-  paymentStatus: "pending" | "paid" | "failed" | "refunded";
+  paymentStatus: "pending" | "paid" | "failed" | "refunded" | "awaiting_verification";
   fulfilmentStatus: "pending_payment" | "paid" | "processing" | "ready_for_dispatch" | "shipped" | "delivered" | "cancelled" | "refund_requested" | "refunded";
   delivery: {
     name: string;
@@ -42,7 +49,13 @@ export interface IOrder extends Document {
     reference: string;
     paidBy?: string;
     paidAt?: Date;
+    note?: string;
   };
+  paymentReceiptUrl?: string;
+  paymentReceiptUploadedAt?: Date;
+  paymentVerifiedAt?: Date;
+  paymentVerifiedBy?: Types.ObjectId;
+  paymentRejectedReason?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -50,7 +63,14 @@ export interface IOrder extends Document {
 const orderSchema = new Schema<IOrder>(
   {
     orderNumber: { type: String, required: true, unique: true },
-    customer: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    customer: { type: Schema.Types.ObjectId, ref: "User" },
+    isGuest: { type: Boolean, default: false },
+    guestCustomer: {
+      name: String,
+      email: String,
+      phone: String,
+    },
+    orderAccessToken: { type: String, index: true },
     items: [
       {
         product: { type: Schema.Types.ObjectId, ref: "Product" },
@@ -66,7 +86,7 @@ const orderSchema = new Schema<IOrder>(
     shipping: { type: Number, default: 0 },
     total: { type: Number, required: true },
     currency: { type: String, default: "NGN" },
-    paymentStatus: { type: String, enum: ["pending", "paid", "failed", "refunded"], default: "pending" },
+    paymentStatus: { type: String, enum: ["pending", "paid", "failed", "refunded", "awaiting_verification"], default: "pending" },
     fulfilmentStatus: { type: String, enum: ["pending_payment", "paid", "processing", "ready_for_dispatch", "shipped", "delivered", "cancelled", "refund_requested", "refunded"], default: "pending_payment" },
     delivery: {
       name: String,
@@ -88,7 +108,13 @@ const orderSchema = new Schema<IOrder>(
       reference: String,
       paidBy: String,
       paidAt: Date,
+      note: String,
     },
+    paymentReceiptUrl: String,
+    paymentReceiptUploadedAt: Date,
+    paymentVerifiedAt: Date,
+    paymentVerifiedBy: { type: Schema.Types.ObjectId, ref: "User" },
+    paymentRejectedReason: String,
     trackingNumber: String,
     coupon: { type: Schema.Types.ObjectId, ref: "Coupon" },
   },

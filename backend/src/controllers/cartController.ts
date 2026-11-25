@@ -7,10 +7,23 @@ function getSessionId(req: Request): string {
   return (req.cookies?.cartSession as string) || (req.headers["x-cart-session"] as string) || "";
 }
 
+function setSessionCookie(req: any, res: Response, sessionId: string) {
+  if (!sessionId || req.user) return;
+  res.cookie("cartSession", sessionId, {
+    httpOnly: true,
+    sameSite: "none",
+    secure: true,
+    maxAge: 1000 * 60 * 60 * 24 * 30,
+    path: "/",
+  });
+}
+
 export const getCart = async (req: any, res: Response) => {
-  const filter = req.user ? { user: req.user._id } : { sessionId: getSessionId(req) };
+  const sessionId = getSessionId(req);
+  const filter = req.user ? { user: req.user._id } : { sessionId };
   let cart = await Cart.findOne(filter).populate("items.product");
-  if (!cart) cart = await Cart.create({ ...(req.user ? { user: req.user._id } : { sessionId: getSessionId(req) }), items: [] });
+  if (!cart) cart = await Cart.create({ ...(req.user ? { user: req.user._id } : { sessionId }), items: [] });
+  setSessionCookie(req, res, sessionId);
   res.json({ cart });
 };
 
@@ -19,7 +32,8 @@ export const addItem = async (req: any, res: Response) => {
   const product = await Product.findById(productId);
   if (!product || product.status !== "published" || (product as any).isDeleted) throw new AppError("Product not available", 404);
   if (product.stockQuantity < quantity) throw new AppError("Insufficient stock", 400);
-  const filter = req.user ? { user: req.user._id } : { sessionId: getSessionId(req) };
+  const sessionId = getSessionId(req);
+  const filter = req.user ? { user: req.user._id } : { sessionId };
   let cart = await Cart.findOne(filter);
   if (!cart) cart = await Cart.create({ ...filter, items: [] });
   const existing = cart.items.find((i: any) => i.product.toString() === productId);
@@ -31,12 +45,14 @@ export const addItem = async (req: any, res: Response) => {
   }
   await cart.save();
   await cart.populate("items.product");
+  setSessionCookie(req, res, sessionId);
   res.json({ cart });
 };
 
 export const updateItem = async (req: any, res: Response) => {
   const { quantity } = req.body;
-  const filter = req.user ? { user: req.user._id } : { sessionId: getSessionId(req) };
+  const sessionId = getSessionId(req);
+  const filter = req.user ? { user: req.user._id } : { sessionId };
   const cart = await Cart.findOne(filter);
   if (!cart) throw new AppError("Cart not found", 404);
   const item = (cart.items as any).id(req.params.itemId);
@@ -52,16 +68,19 @@ export const updateItem = async (req: any, res: Response) => {
   }
   await cart.save();
   await cart.populate("items.product");
+  setSessionCookie(req, res, sessionId);
   res.json({ cart });
 };
 
 export const removeItem = async (req: any, res: Response) => {
-  const filter = req.user ? { user: req.user._id } : { sessionId: getSessionId(req) };
+  const sessionId = getSessionId(req);
+  const filter = req.user ? { user: req.user._id } : { sessionId };
   const cart = await Cart.findOne(filter);
   if (!cart) throw new AppError("Cart not found", 404);
   const item = (cart.items as any).id(req.params.itemId);
   if (item) item.deleteOne();
   await cart.save();
   await cart.populate("items.product");
+  setSessionCookie(req, res, sessionId);
   res.json({ cart });
 };

@@ -6,6 +6,12 @@ import { signToken } from "../middleware/auth";
 import { AppError } from "../middleware/errorHandler";
 import { env } from "../config/env";
 
+const authCookieOptions = {
+  httpOnly: true,
+  secure: env.nodeEnv === "production",
+  sameSite: env.nodeEnv === "production" ? ("none" as const) : ("lax" as const),
+};
+
 export const register = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
   const exists = await User.findOne({ email });
@@ -13,7 +19,7 @@ export const register = async (req: Request, res: Response) => {
   const hashed = await bcrypt.hash(password, 12);
   const user = await User.create({ name, email, password: hashed });
   const token = signToken(user._id.toString());
-  res.cookie("token", token, { httpOnly: true, secure: env.nodeEnv === "production", sameSite: "lax", maxAge: 7 * 24 * 60 * 60 * 1000 });
+  res.cookie("token", token, { ...authCookieOptions, maxAge: 7 * 24 * 60 * 60 * 1000 });
   res.status(201).json({ user: { id: user._id, name: user.name, email: user.email, role: user.role } });
 };
 
@@ -24,12 +30,12 @@ export const login = async (req: Request, res: Response) => {
   const ok = await bcrypt.compare(password, user.password);
   if (!ok) throw new AppError("Invalid credentials", 401);
   const token = signToken(user._id.toString());
-  res.cookie("token", token, { httpOnly: true, secure: env.nodeEnv === "production", sameSite: "lax", maxAge: 7 * 24 * 60 * 60 * 1000 });
+  res.cookie("token", token, { ...authCookieOptions, maxAge: 7 * 24 * 60 * 60 * 1000 });
   res.json({ user: { id: user._id, name: user.name, email: user.email, role: user.role } });
 };
 
 export const logout = async (_req: Request, res: Response) => {
-  res.clearCookie("token");
+  res.clearCookie("token", authCookieOptions);
   res.json({ message: "Logged out" });
 };
 

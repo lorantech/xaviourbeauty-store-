@@ -10,9 +10,31 @@ const API_BASE = /\/api$/i.test(normalizedApiUrl)
   ? normalizedApiUrl
   : `${normalizedApiUrl}/api`;
 
+export const CART_SESSION_KEY = "xbs_cart_session";
+
+export function getCartSessionId(): string {
+  if (typeof window === "undefined") return "";
+  const existing = window.localStorage.getItem(CART_SESSION_KEY);
+  if (existing) return existing;
+  const id = (typeof crypto !== "undefined" && "randomUUID" in crypto)
+    ? crypto.randomUUID()
+    : `xbs_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
+  window.localStorage.setItem(CART_SESSION_KEY, id);
+  return id;
+}
+
 export const api = axios.create({
   baseURL: API_BASE,
   withCredentials: true,
+});
+
+api.interceptors.request.use((config) => {
+  if (typeof window !== "undefined") {
+    const sessionId = getCartSessionId();
+    config.headers = config.headers ?? {};
+    (config.headers as any)["x-cart-session"] = sessionId;
+  }
+  return config;
 });
 
 export const API_URL = API_BASE;

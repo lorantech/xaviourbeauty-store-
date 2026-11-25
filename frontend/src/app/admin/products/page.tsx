@@ -104,20 +104,10 @@ export default function AdminProducts() {
 
   const removeImage = (index: number) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
-    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const removeExistingImage = async (productId: string, imageUrl: string) => {
-    if (!confirm("Remove this image?")) return;
-    try {
-      await api.delete(`/products/${productId}/images`, { data: { imageUrl } });
-      setEditingProduct((prev: any) => ({
-        ...prev,
-        images: prev.images.filter((img: string) => img !== imageUrl),
-      }));
-    } catch (error) {
-      alert("Failed to remove image");
-    }
+    setImagePreviews((prev) => {
+      URL.revokeObjectURL(prev[index]);
+      return prev.filter((_, i) => i !== index);
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -127,35 +117,33 @@ export default function AdminProducts() {
       return;
     }
 
+    setUploading(true);
     try {
+      let uploadedImageUrls: string[] = [];
+      if (images.length > 0) {
+        const formData = new FormData();
+        images.forEach((image) => formData.append("files", image));
+        const uploadResponse = await api.post("/upload/images", formData);
+        uploadedImageUrls = uploadResponse.data.urls;
+      }
+
+      const productData = {
+        ...form,
+        images: [...form.images, ...uploadedImageUrls],
+        price: Number(form.price),
+        originalPrice: form.originalPrice ? Number(form.originalPrice) : undefined,
+        stockQuantity: Number(form.stockQuantity),
+        featured: form.featured,
+        bestSeller: form.bestSeller,
+        newArrival: form.newArrival,
+      };
+
       if (editingProduct) {
         await api.patch(`/products/${editingProduct._id}`, {
-          ...form,
-          price: Number(form.price),
-          originalPrice: form.originalPrice ? Number(form.originalPrice) : undefined,
-          stockQuantity: Number(form.stockQuantity),
-          featured: form.featured,
-          bestSeller: form.bestSeller,
-          newArrival: form.newArrival,
+          ...productData,
         });
       } else {
-        const res = await api.post("/products", {
-          ...form,
-          price: Number(form.price),
-          originalPrice: form.originalPrice ? Number(form.originalPrice) : undefined,
-          stockQuantity: Number(form.stockQuantity),
-          featured: form.featured,
-          bestSeller: form.bestSeller,
-          newArrival: form.newArrival,
-        });
-        // Upload images if any
-        if (images.length > 0) {
-          const formData = new FormData();
-          images.forEach((img) => formData.append("images", img));
-          await api.post(`/products/${res.data._id}/images`, formData, {
-            headers: { "Content-Type": "multipart/form-data" },
-          });
-        }
+        await api.post("/products", productData);
       }
       setShowForm(false);
       setEditingProduct(null);
@@ -163,6 +151,8 @@ export default function AdminProducts() {
       load();
     } catch (error: any) {
       alert(error.response?.data?.message || "Failed to save product");
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -185,7 +175,7 @@ export default function AdminProducts() {
       variants: product.variants || [{ name: "", options: [] }],
     });
     setImages([]);
-    setImagePreviews(product.images || []);
+    setImagePreviews([]);
     setShowForm(true);
   };
 
@@ -486,6 +476,22 @@ export default function AdminProducts() {
                     <div>
                       <label className="block text-sm font-medium text-primary-text mb-1.5">Images</label>
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-2">
+                        {form.images.map((imageUrl, index) => (
+                          <div key={`existing-${imageUrl}`} className="relative aspect-square rounded-lg overflow-hidden border border-light-border dark:border-gray-700">
+                            <img src={imageUrl} alt={`Product image ${index + 1}`} className="w-full h-full object-cover" />
+                            <button
+                              type="button"
+                              onClick={() => setForm((prev) => ({
+                                ...prev,
+                                images: prev.images.filter((_, imageIndex) => imageIndex !== index),
+                              }))}
+                              className="absolute top-1 right-1 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center text-xs hover:bg-red-600"
+                              aria-label="Remove existing image"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </div>
+                        ))}
                         {imagePreviews.map((preview, index) => (
                           <div key={index} className="relative aspect-square rounded-lg overflow-hidden border border-light-border dark:border-gray-700">
                             <img src={preview} alt={`Preview ${index}`} className="w-full h-full object-cover" />
@@ -534,9 +540,9 @@ export default function AdminProducts() {
                       <button type="button" onClick={() => { setShowForm(false); setEditingProduct(null); resetForm(); }} className="px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm font-medium text-primary-text hover:bg-muted transition-colors">
                         Cancel
                       </button>
-                      <button type="submit" className="px-4 py-2.5 bg-primary-forest-green hover:bg-secondary-forest-green text-white font-medium rounded-lg transition-colors flex items-center gap-2">
-                        <Save className="w-4 h-4" />
-                        {editingProduct ? "Update Product" : "Create Product"}
+                      <button type="submit" disabled={uploading} className="px-4 py-2.5 bg-primary-forest-green hover:bg-secondary-forest-green text-white font-medium rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50">
+                        {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                        {uploading ? "Saving..." : editingProduct ? "Update Product" : "Create Product"}
                       </button>
                     </div>
                   </div>

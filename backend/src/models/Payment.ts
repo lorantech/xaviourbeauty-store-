@@ -5,7 +5,7 @@ export interface IPayment extends Document {
   reference: string;
   amount: number;
   currency: string;
-  status: "pending" | "success" | "failed";
+  status: "pending" | "success" | "failed" | "awaiting_verification" | "rejected";
   channel?: string;
   paystackData?: any;
   verifiedAt?: Date;
@@ -14,6 +14,7 @@ export interface IPayment extends Document {
   proofDetails?: any;
   reviewedBy?: Types.ObjectId;
   reviewedAt?: Date;
+  rejectionReason?: string;
 }
 
 const paymentSchema = new Schema<IPayment>(
@@ -22,7 +23,7 @@ const paymentSchema = new Schema<IPayment>(
     reference: { type: String, required: true, unique: true },
     amount: { type: Number, required: true },
     currency: { type: String, default: "NGN" },
-    status: { type: String, enum: ["pending", "success", "failed"], default: "pending" },
+    status: { type: String, enum: ["pending", "success", "failed", "awaiting_verification", "rejected"], default: "pending" },
     channel: String,
     paystackData: Schema.Types.Mixed,
     verifiedAt: Date,
@@ -31,6 +32,7 @@ const paymentSchema = new Schema<IPayment>(
     proofDetails: Schema.Types.Mixed,
     reviewedBy: { type: Schema.Types.ObjectId, ref: "User" },
     reviewedAt: Date,
+    rejectionReason: String,
   },
   { timestamps: true }
 );

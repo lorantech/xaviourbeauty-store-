@@ -21,8 +21,11 @@ import testimonialRoutes from "./routes/testimonialRoutes";
 import reviewRoutes from "./routes/reviewRoutes";
 import uploadRoutes from "./routes/uploadRoutes";
 import dashboardRoutes from "./routes/dashboardRoutes";
+import notificationRoutes from "./routes/notificationRoutes";
+import mediaRoutes from "./routes/mediaRoutes";
 
 const app = express();
+app.set("trust proxy", 1);
 
 app.use((req: any, res: any, next: any) => {
   const origin = req.headers.origin;
@@ -39,7 +42,7 @@ app.use((req: any, res: any, next: any) => {
   );
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "Content-Type,Authorization,X-Requested-With,Accept"
+    "Content-Type,Authorization,X-Requested-With,Accept,X-Order-Token,X-Cart-Session"
   );
   if (req.method === "OPTIONS") {
     return res.sendStatus(204);
@@ -84,6 +87,8 @@ app.use("/api/ceo-corner", ceoRoutes);
 app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/admin/notifications", notificationRoutes);
+app.use("/api/admin/media", mediaRoutes);
 app.use("/api/admin", dashboardRoutes);
 
 app.use(errorHandler);
