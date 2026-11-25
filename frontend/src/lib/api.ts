@@ -37,5 +37,18 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (typeof window !== "undefined" && error?.response?.status === 401) {
+      const path = window.location.pathname;
+      if (path.startsWith("/admin") && path !== "/admin/login") {
+        window.location.href = "/admin/login";
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 export const API_URL = API_BASE;
 export const BACKEND_URL = API_BASE.replace(/\/api$/, "");
