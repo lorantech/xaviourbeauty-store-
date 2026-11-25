@@ -89,8 +89,20 @@ function AdminProductsContent() {
   };
 
   useEffect(() => {
+    if (user?.role !== "admin") return;
+    api.get("/categories/all").then((r) => setCategories(r.data.categories || [])).catch(() => {});
+  }, [user]);
+
+  useEffect(() => {
     if (user?.role === "admin") load();
   }, [user, search, statusFilter, categoryFilter]);
+
+  useEffect(() => {
+    if (!showForm || editingProduct) return;
+    if (!form.category && categories[0]?._id) {
+      setForm((prev) => ({ ...prev, category: prev.category || categories[0]._id }));
+    }
+  }, [showForm, editingProduct, categories, form.category]);
 
   useEffect(() => {
     if (searchParams.get("action") === "new") {
@@ -454,6 +466,7 @@ function AdminProductsContent() {
                     <div>
                       <label className="block text-sm font-medium text-primary-text mb-1.5">Category *</label>
                       <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-light-border dark:border-gray-700 rounded-lg text-sm text-primary-text focus:outline-none focus:ring-2 focus:ring-soft-gold" required>
+                        <option value="">Select a category</option>
                         {categories.map((c) => <option key={c._id} value={c._id}>{c.name}</option>)}
                       </select>
                     </div>
