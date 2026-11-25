@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { api } from "@/lib/api";
+import { api, setAuthToken } from "@/lib/api";
 
 export interface User {
   id: string;
@@ -34,7 +34,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const { data } = await api.get("/auth/me");
       setUser(data.user);
+      if (data.token) setAuthToken(data.token);
     } catch {
+      setAuthToken();
       setUser(null);
     } finally {
       setLoading(false);
@@ -47,17 +49,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     const { data } = await api.post("/auth/login", { email, password });
+    if (data.token) setAuthToken(data.token);
     setUser(data.user);
   };
 
   const register = async (name: string, email: string, password: string) => {
     const { data } = await api.post("/auth/register", { name, email, password });
+    if (data.token) setAuthToken(data.token);
     setUser(data.user);
   };
 
   const logout = async () => {
-    await api.post("/auth/logout");
-    setUser(null);
+    try { await api.post("/auth/logout"); } finally {
+      setAuthToken();
+      setUser(null);
+    }
   };
 
   return (

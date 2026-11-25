@@ -23,6 +23,19 @@ export function getCartSessionId(): string {
   return id;
 }
 
+export const AUTH_TOKEN_KEY = "xbs_auth_token";
+
+export function getAuthToken(): string {
+  if (typeof window === "undefined") return "";
+  return window.localStorage.getItem(AUTH_TOKEN_KEY) || "";
+}
+
+export function setAuthToken(token?: string) {
+  if (typeof window === "undefined") return;
+  if (token) window.localStorage.setItem(AUTH_TOKEN_KEY, token);
+  else window.localStorage.removeItem(AUTH_TOKEN_KEY);
+}
+
 export const api = axios.create({
   baseURL: API_BASE,
   withCredentials: true,
@@ -33,6 +46,8 @@ api.interceptors.request.use((config) => {
     const sessionId = getCartSessionId();
     config.headers = config.headers ?? {};
     (config.headers as any)["x-cart-session"] = sessionId;
+    const token = getAuthToken();
+    if (token) (config.headers as any).Authorization = `Bearer ${token}`;
   }
   return config;
 });
@@ -42,7 +57,10 @@ api.interceptors.response.use(
   (error) => {
     if (typeof window !== "undefined" && error?.response?.status === 401) {
       const path = window.location.pathname;
-      if (path.startsWith("/admin") && path !== "/admin/login") {
+      const requestUrl = String(error?.config?.url || "");
+      const isAuthCheck = requestUrl.includes("/auth/me") || requestUrl.includes("/auth/login");
+      if (path.startsWith("/admin") && path !== "/admin/login" && !isAuthCheck) {
+        setAuthToken();
         window.location.href = "/admin/login";
       }
     }

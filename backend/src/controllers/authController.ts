@@ -20,7 +20,7 @@ export const register = async (req: Request, res: Response) => {
   const user = await User.create({ name, email, password: hashed });
   const token = signToken(user._id.toString());
   res.cookie("token", token, { ...authCookieOptions, maxAge: 7 * 24 * 60 * 60 * 1000 });
-  res.status(201).json({ user: { id: user._id, name: user.name, email: user.email, role: user.role } });
+  res.status(201).json({ user: { id: user._id, name: user.name, email: user.email, role: user.role }, token });
 };
 
 export const login = async (req: Request, res: Response) => {
@@ -31,7 +31,7 @@ export const login = async (req: Request, res: Response) => {
   if (!ok) throw new AppError("Invalid credentials", 401);
   const token = signToken(user._id.toString());
   res.cookie("token", token, { ...authCookieOptions, maxAge: 7 * 24 * 60 * 60 * 1000 });
-  res.json({ user: { id: user._id, name: user.name, email: user.email, role: user.role } });
+  res.json({ user: { id: user._id, name: user.name, email: user.email, role: user.role }, token });
 };
 
 export const logout = async (_req: Request, res: Response) => {
