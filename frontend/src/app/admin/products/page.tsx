@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import AdminLayout from "@/components/AdminLayout";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
@@ -31,6 +32,8 @@ const statusColors = {
 
 export default function AdminProducts() {
   const { user } = useAuth();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [products, setProducts] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -88,6 +91,15 @@ export default function AdminProducts() {
   useEffect(() => {
     if (user?.role === "admin") load();
   }, [user, search, statusFilter, categoryFilter]);
+
+  useEffect(() => {
+    if (searchParams.get("action") === "new") {
+      setEditingProduct(null);
+      resetForm();
+      setShowForm(true);
+      router.replace("/admin/products");
+    }
+  }, [searchParams, router]);
 
   const handleImageUpload = async (files: FileList) => {
     const newFiles = Array.from(files);
